@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/activity_main">
+
+    <fragment
+        android:id="@+id/activity_main"
+        android:name="it.torino.totalshop.HomeFragment"
+        android:label="Login"
+        tools:layout="@layout/activity_main">
+    </fragment>
+
+    <fragment
+        android:id="@+id/login_page"
+        android:name="it.torino.totalshop.Login_Fragment"
+        tools:layout="@layout/login">
+        <argument
+            android:name="UserType"
+            app:argType="integer"
+            android:defaultValue="0"/>
+
+        <action
+            android:id="@+id/back_action"
+            app:destination="@+id/activity_main">
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/register_page"
+        android:name="it.torino.totalshop.RegisterFragment"
+        tools:layout="@layout/register">
+        <argument
+            android:name="UserType"
+            app:argType="integer"
+            android:defaultValue="0"/>
+
+        <action
+            android:id="@+id/next_action"
+            app:destination="@+id/login_page">
+        </action>
+    </fragment>
+
+</navigation>

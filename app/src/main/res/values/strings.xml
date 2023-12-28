@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TotalShop</string>
+    <string name="back">Indietro</string>
 </resources>

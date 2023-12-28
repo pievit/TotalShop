@@ -46,17 +46,17 @@
         android:backgroundTint="@color/design_default_color_primary_dark"
         android:text="Accedi"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnindietro"
+        app:layout_constraintEnd_toStartOf="@+id/btnregistra"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password" />
 
 
     <Button
-        android:id="@+id/btnindietro"
+        android:id="@+id/btnregistra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/design_default_color_error"
-        android:text="Indietro"
+        android:text="Registrati"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/loginuserbtn"
