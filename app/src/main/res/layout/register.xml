@@ -51,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.5"
         >
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/cont2"
             android:layout_width="0dp"
             android:layout_height="0dp"
