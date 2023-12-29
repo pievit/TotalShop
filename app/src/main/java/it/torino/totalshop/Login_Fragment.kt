@@ -29,11 +29,14 @@ class Login_Fragment: Fragment() {
 //                popExit = R.anim.slide_out_right
 //            }
 //        }
-        // it associates the onClicklistener of the button and asks to navigate to  R.id.flow_step_one_dest,
+
         view.findViewById<Button>(R.id.loginuserbtn)?.setOnClickListener {
             login()
         }
 
+        view.findViewById<Button>(R.id.btnregistra)?.setOnClickListener {
+            findNavController().navigate(R.id.register_page,arguments)
+        }
     }
     fun login(){
 

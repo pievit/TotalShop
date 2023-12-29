@@ -28,7 +28,7 @@ class HomeFragment: Fragment() {
 //            }
 //        }
         val arg : Bundle = Bundle()
-        // it associates the onClicklistener of the button and asks to navigate to  R.id.flow_step_one_dest,
+
         view.findViewById<Button>(R.id.loginutentebtn)?.setOnClickListener {
             arg.putInt("UserType", 0)
             findNavController().navigate(R.id.login_page, arg)
