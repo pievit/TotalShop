@@ -3,16 +3,22 @@ package it.torino.totalshop
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
+import android.service.autofill.UserData
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import it.torino.totalshop.roomdb.Repository
+import it.torino.totalshop.roomdb.entities.UsersData
 
 
 class MainActivity : AppCompatActivity() {
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.nav_activity)
@@ -37,5 +43,11 @@ class MainActivity : AppCompatActivity() {
             }
             Log.d("MyActivity", "Destination changed to ${destination.id}")
         }
+
+        //prova db
+        var rep = Repository(this)
+        var ud = UsersData("gv@gmail.com","venggeng",userType = true)
+        rep.dbUsersDataDao?.insert(ud)
+        Log.d("DB","Qui")
     }
 }
