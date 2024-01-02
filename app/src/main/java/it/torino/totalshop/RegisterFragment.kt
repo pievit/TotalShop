@@ -21,7 +21,7 @@ class RegisterFragment: Fragment() {
         val safeArgs: RegisterFragmentArgs by navArgs()
 
         if(safeArgs.UserType == 1) {
-            val constraintLayout = view.findViewById<FragmentContainerView>(R.id.cont2)
+            val constraintLayout = view.findViewById<ConstraintLayout>(R.id.cont2)
             val layoutInflater = LayoutInflater.from(context)
             val inflatedView = layoutInflater.inflate(R.layout.vendor_inputs, constraintLayout, false)
             constraintLayout.addView(inflatedView)
