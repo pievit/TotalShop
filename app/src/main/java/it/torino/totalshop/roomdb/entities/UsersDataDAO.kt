@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface UsersDataDAO {
@@ -14,9 +15,12 @@ interface UsersDataDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg usersData: UsersData)
 
-    @Delete
-    fun delete(usersData: UsersData?)
+    @Query("SELECT * FROM UsersData")
+    fun getAllUsers(): MutableList<UsersData>?
 
     @Delete
-    fun deleteAll(vararg usersData: UsersData?)
+    fun delete(usersData: UsersData)
+
+    @Delete
+    fun deleteAll(vararg usersData: UsersData)
 }

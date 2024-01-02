@@ -8,16 +8,20 @@ import android.os.Bundle
 import android.service.autofill.UserData
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.roomdb.Repository
 import it.torino.totalshop.roomdb.entities.UsersData
+import kotlinx.coroutines.CoroutineScope
 
 
 class MainActivity : AppCompatActivity() {
+    private var vm: viewModel? = null
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +48,14 @@ class MainActivity : AppCompatActivity() {
             Log.d("MyActivity", "Destination changed to ${destination.id}")
         }
 
-        //prova db
-        var rep = Repository(this)
-        var ud = UsersData("gv@gmail.com","venggeng",userType = true)
-        rep.dbUsersDataDao?.insert(ud)
-        Log.d("DB","Qui")
+        this.vm = ViewModelProvider(this)[viewModel::class.java]
+
+        this.vm!!.usersList.observe(this){
+            list -> Log.d("Test", list.toString())
+        }
+
+        this.vm?.getUsers()
     }
+
+
 }

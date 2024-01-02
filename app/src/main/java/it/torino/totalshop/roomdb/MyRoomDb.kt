@@ -26,6 +26,7 @@ abstract class MyRoomDb: RoomDatabase() {
                             MyRoomDb::class.java, "TotalShopDb"
                         )
                             .addMigrations()
+                            .fallbackToDestructiveMigration()
                             .addCallback(roomDatabaseCallback)
                             .build()
                     }

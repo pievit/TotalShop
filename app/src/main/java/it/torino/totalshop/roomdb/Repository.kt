@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.torino.totalshop.roomdb.entities.UsersData
 import it.torino.totalshop.roomdb.entities.UsersDataDAO
+import it.torino.totalshop.roomdb.MyRoomDb
 
 class Repository(application: Context?) : ViewModel(){
     val dbUsersDataDao: UsersDataDAO?
