@@ -1,16 +1,15 @@
-package it.torino.totalshop
+package it.torino.totalshop.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
+import androidx.navigation.Navigation
+import it.torino.totalshop.R
 
-class Login_Fragment: Fragment() {
+class LoginFragment: Fragment() {
     val userType : Int = arguments?.getInt("UserType") ?: 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,7 +34,7 @@ class Login_Fragment: Fragment() {
         }
 
         view.findViewById<Button>(R.id.btnregistra)?.setOnClickListener {
-            findNavController().navigate(R.id.register_page,arguments)
+            Navigation.createNavigateOnClickListener(R.id.next_action, arguments)
         }
     }
     fun login(){
