@@ -1,5 +1,6 @@
 package it.torino.totalshop.roomdb.entities
 
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -17,6 +18,9 @@ interface UsersDataDAO {
 
     @Query("SELECT * FROM UsersData")
     fun getAllUsers(): MutableList<UsersData>?
+
+    @Query("SELECT * FROM UsersData WHERE UsersData.email=:email AND UsersData.userType=:userType")
+    fun getUser(email:String,userType: Boolean): UsersData?
 
     @Delete
     fun delete(usersData: UsersData)

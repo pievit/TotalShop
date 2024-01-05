@@ -21,7 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 
 
 class MainActivity : AppCompatActivity() {
-    private var vm: viewModel? = null
+    var vm: viewModel? = null
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +29,16 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.my_nav_host_fragment) as NavHostFragment? ?: return
 
 
         findViewById<View>(R.id.backButton).setOnClickListener{
-          host.findNavController().popBackStack()
-
+            vm?.user?.value = null
+            vm?.store?.value = null
+            host.findNavController().popBackStack()
         }
 
         host.findNavController().addOnDestinationChangedListener { _, destination, _ ->
@@ -51,10 +53,16 @@ class MainActivity : AppCompatActivity() {
         this.vm = ViewModelProvider(this)[viewModel::class.java]
 
         this.vm!!.usersList.observe(this){
-            list -> Log.d("Test", list.toString())
+            list -> Log.d("Test","Users: " + list.toString())
         }
 
+        this.vm!!.storesList.observe(this){
+            list -> Log.d("Test","Stores: " + list.toString())
+        }
+
+
         this.vm?.getUsers()
+        this.vm?.getStores()
     }
 
 
