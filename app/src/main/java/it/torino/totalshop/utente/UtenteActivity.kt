@@ -1,18 +1,16 @@
 package it.torino.totalshop.utente
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import it.torino.totalshop.R
-
-
-
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import it.torino.totalshop.R
 
 class UtenteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
