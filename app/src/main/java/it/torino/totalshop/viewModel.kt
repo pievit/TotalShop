@@ -4,14 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import it.torino.totalshop.roomdb.Repository
 import androidx.lifecycle.viewModelScope
+import it.torino.totalshop.roomdb.Repository
 import it.torino.totalshop.roomdb.entities.StoreData
-import it.torino.totalshop.roomdb.entities.StoreDataDAO
 import it.torino.totalshop.roomdb.entities.UsersData
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

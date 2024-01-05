@@ -1,8 +1,6 @@
-package it.torino.totalshop
+package it.torino.totalshop.login
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +9,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import it.torino.totalshop.MainActivity
-import androidx.navigation.navOptions
-import it.torino.totalshop.roomdb.entities.UsersData
+import androidx.navigation.Navigation
+import it.torino.totalshop.R
+import it.torino.totalshop.viewModel
 
-class Login_Fragment: Fragment() {
+class LoginFragment: Fragment() {
     var userType : Int? = null
     var vm: viewModel? = null
     var flagLogin: Boolean = false
@@ -68,7 +65,7 @@ class Login_Fragment: Fragment() {
         }
 
         view.findViewById<Button>(R.id.btnregistra)?.setOnClickListener {
-            findNavController().navigate(R.id.register_page,arguments)
+            Navigation.createNavigateOnClickListener(R.id.next_action, arguments)
         }
     }
     fun login(){

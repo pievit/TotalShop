@@ -6,7 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.torino.totalshop.MainActivity">
+    tools:context="it.torino.totalshop.login.LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
         </androidx.appcompat.widget.Toolbar>
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/my_nav_host_fragment"
+            android:id="@+id/login_nav_host_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -49,9 +49,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:navGraph="@navigation/nav_graph" />
+            app:navGraph="@navigation/login_nav_graph" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
