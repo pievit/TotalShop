@@ -3,6 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/textvend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/businessname"
+        android:text="Inserisci i dati del tuo Store"
+        android:textSize="25dp"
+        />
     <EditText
         android:id="@+id/businessname"
         android:layout_width="match_parent"
@@ -11,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/businsessaddress"
-        android:hint="Inserisci nome attività"
+        android:hint="Inserisci nome Store"
 
         />
     <EditText
@@ -21,17 +30,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/businessname"
-        android:hint="Inserisci indirizzo attività"
+        app:layout_constraintBottom_toTopOf="@id/businesscategory"
+        android:hint="Inserisci indirizzo Store"
 
         />
-    <ListView
+
+    <EditText
+        android:id="@+id/businesscategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:dividerHeight="1dp"
-        android:id="@+id/businesscategories"
         app:layout_constraintTop_toBottomOf="@id/businsessaddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:hint="Inserisci categoria Store"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,14 +6,12 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(indices = [Index("id")])
-open class UsersData(var email:String, var password: String, var userType: Boolean) {
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
-    var id: Int = 0
+@Entity(primaryKeys = ["email"])
+open class UsersData(var email:String, var password: String, var phone: String,var userType: Boolean) {
+
 
     override fun toString(): String {
-        return "Id: "+this.id+",Email: "+this.email + ",Password: "+ this.password + ",UserType: "+this.userType
+        return "Email: "+this.email + ",Password: "+ this.password + ",Phone: "+phone+ ",UserType: "+this.userType
     }
 
 }

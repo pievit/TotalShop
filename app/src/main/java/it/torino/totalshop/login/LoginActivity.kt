@@ -9,6 +9,7 @@ import android.service.autofill.UserData
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -19,19 +20,23 @@ import it.torino.totalshop.viewModel
 
 
 class LoginActivity : AppCompatActivity() {
-    private var vm: viewModel? = null
+    var vm: viewModel? = null
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.login_nav_host_fragment) as NavHostFragment? ?: return
 
 
         findViewById<View>(R.id.backButton).setOnClickListener{
+            vm?.user?.value = null
+            vm?.store?.value = null
             host.findNavController().popBackStack()
         }
 
@@ -47,10 +52,16 @@ class LoginActivity : AppCompatActivity() {
         this.vm = ViewModelProvider(this)[viewModel::class.java]
 
         this.vm!!.usersList.observe(this){
-            list -> Log.d("Test", list.toString())
+            list -> Log.d("Test","Users: " + list.toString())
         }
 
+        this.vm!!.storesList.observe(this){
+            list -> Log.d("Test","Stores: " + list.toString())
+        }
+
+
         this.vm?.getUsers()
+        this.vm?.getStores()
     }
 
 
