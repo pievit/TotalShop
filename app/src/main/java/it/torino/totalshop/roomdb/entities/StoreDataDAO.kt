@@ -19,6 +19,7 @@ interface StoreDataDAO {
 
     @Query("SELECT * FROM StoreData WHERE StoreData.owner=:email")
     fun getStore(email:String): StoreData?
+
     @Delete
     fun delete(storeData: StoreData)
 
