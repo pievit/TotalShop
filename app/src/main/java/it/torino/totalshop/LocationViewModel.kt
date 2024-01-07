@@ -1,6 +1,8 @@
 package it.torino.totalshop
 
 import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.Application
 import android.content.pm.PackageManager
 import android.location.Location
@@ -24,7 +26,7 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
     private var _latitude : Double = 0.0
     private var _longitude : Double = 0.0
     var locationData : MutableLiveData<LocationData> = MutableLiveData<LocationData>()
-
+    val MY_PERMISSIONS_REQUEST_LOCATION : Int = 50
 
     private val locationManager =
         application.getSystemService(android.content.Context.LOCATION_SERVICE) as LocationManager
@@ -35,35 +37,66 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
             _longitude = location.longitude
     }
 
+    private fun requestLocationPermission() {
+
+        ActivityCompat.requestPermissions(
+            Activity(),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            ),
+            MY_PERMISSIONS_REQUEST_LOCATION
+        )
+    }
+
     init{
+        startLocationService()
+    }
+
+    fun startLocationService(){
         if (ActivityCompat.checkSelfPermission(
                 getApplication(),
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
                 getApplication(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    Activity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                AlertDialog.Builder(Activity())
+                    .setTitle("Necessaria autorizzazione posizione esatta")
+                    .setMessage("Per funzionare correttamente, l'applicazione necessita l'autorizzazione per accedere alla posizione precisa")
+                    .setPositiveButton(
+                        "OK"
+                    ) { _, _ ->
+                        //Prompt the user once explanation has been shown
+                        requestLocationPermission()
+                    }
+                    .create()
+                    .show()
+            } else {
+                // No explanation needed, we can request the permission.
+                requestLocationPermission()
+            }
+        } else {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                timeBeforeRefreshMicroSec, // minimum time interval between updates in milliseconds
+                50f,   // minimum distance between updates in meters
+                locationListener
+            )
 
-
+            getCoord()
         }
-
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            timeBeforeRefreshMicroSec, // minimum time interval between updates in milliseconds
-            50f,   // minimum distance between updates in meters
-            locationListener
-        )
-
-        getCoord()
     }
+
     fun getCoord(){
         viewModelScope.launch(Dispatchers.IO) {
             val res = getLastLocation()
