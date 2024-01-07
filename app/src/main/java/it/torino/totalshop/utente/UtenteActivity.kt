@@ -26,9 +26,7 @@ class UtenteActivity : AppCompatActivity() {
         val navController = host.navController
         setupBottomNavMenu(navController)
 
-        findViewById<View>(R.id.backButton).setOnClickListener{
-            navController.popBackStack()
-        }
+
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d("ActivityUtente", "Destination changed to ${destination.id}")

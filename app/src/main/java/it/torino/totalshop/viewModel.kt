@@ -120,12 +120,12 @@ class viewModel(application: Application): AndroidViewModel(application) {
                 if(res!=null){
                     var nearStoreList: MutableList<StoreData>? = null
                     for(r: StoreData in res){
-                        if(r.lat != null && r.long != null){
+                        if(r.lat != null && r.lon != null){
                             val R = 6371e3; // metres
                             val var1 = lat * Math.PI/180; // φ, λ in radians
                             val var2 = (r.lat!! * Math.PI)/180;
                             val delt1 = (r.lat!!-lat) * Math.PI/180;
-                            val delt2 = (r.long!!-long) * Math.PI/180;
+                            val delt2 = (r.lon!!-long) * Math.PI/180;
 
                             val a = sin(delt1/2) * sin(delt1/2) +
                                     cos(var1) * cos(var2) *

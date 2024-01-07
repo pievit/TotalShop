@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+//import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,11 +37,42 @@ class HomeFragmentUtente: Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
 //        addDataToList()
+        adapter = storeAdapter(mList)
+        recyclerView.adapter = adapter
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
 
+            override fun onQueryTextChange(newText: String?): Boolean {
+                updateList(newText)
+                return true
+            }
+
+        })
+
+        vm?.getStores()
 
         vm?.storesList?.observe(viewLifecycleOwner){
-            adapter = storeAdapter(mList)
-            recyclerView.adapter = adapter
+                sl ->
+            mList = sl as ArrayList<StoreData>
+            adapter.setFilteredList(mList)
+        }
+    }
+
+    private fun updateList(newText: String?){
+        val newList = ArrayList<StoreData?>()
+        if(newText!=null){
+            for(i in mList){
+                if(i.storeName.contains(newText as CharSequence,true) || i.storeCategory.contains(newText as CharSequence,true)){
+                    newList.add(i)
+                }
+            }
+        }
+        if(newList.isEmpty()){
+            Toast.makeText(requireActivity(),"Nessuno Store trovato.",Toast.LENGTH_SHORT).show()
+        }else{
+            adapter.setFilteredList(newList as List<StoreData>)
         }
     }
 }
