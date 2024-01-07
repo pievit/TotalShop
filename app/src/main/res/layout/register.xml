@@ -31,8 +31,17 @@
         android:hint="Inserisci password"
         android:inputType="textPassword"
         app:layout_constraintTop_toBottomOf="@id/reguser"
+        app:layout_constraintBottom_toTopOf="@id/regname"
+        />
+    <EditText
+        android:id="@+id/regname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Inserisci nome"
+        app:layout_constraintTop_toBottomOf="@id/regpass"
         app:layout_constraintBottom_toTopOf="@id/regphone"
         />
+
     <EditText
         android:id="@+id/regphone"
         android:layout_width="match_parent"

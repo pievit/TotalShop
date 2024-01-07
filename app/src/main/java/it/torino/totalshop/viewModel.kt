@@ -11,6 +11,10 @@ import it.torino.totalshop.roomdb.entities.UsersData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class viewModel(application: Application): AndroidViewModel(application) {
     private val repository: Repository = Repository(application)
@@ -107,5 +111,39 @@ class viewModel(application: Application): AndroidViewModel(application) {
 
     private suspend fun insertStoreSus(storeData: StoreData){
        repository.dbStoreDataDAO?.insert(storeData)
+    }
+
+    fun getNearStores(lat: Double,long: Double,dist: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            var res = getAllStores()
+            withContext(Dispatchers.Main){
+                if(res!=null){
+                    var nearStoreList: MutableList<StoreData>? = null
+                    for(r: StoreData in res){
+                        if(r.lat != null && r.long != null){
+                            val R = 6371e3; // metres
+                            val var1 = lat * Math.PI/180; // φ, λ in radians
+                            val var2 = (r.lat!! * Math.PI)/180;
+                            val delt1 = (r.lat!!-lat) * Math.PI/180;
+                            val delt2 = (r.long!!-long) * Math.PI/180;
+
+                            val a = sin(delt1/2) * sin(delt1/2) +
+                                    cos(var1) * cos(var2) *
+                                    sin(delt2/2) * sin(delt2/2);
+                            val c = 2 * atan2(sqrt(a), sqrt(1-a));
+
+                            val d = R * c; //distanza in metri
+
+                            if(d<= dist){
+                                nearStoreList?.add(r)
+                            }
+                        }
+
+                    }
+
+                    storesList.value = nearStoreList
+                }
+            }
+        }
     }
 }

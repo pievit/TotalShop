@@ -1,5 +1,6 @@
 package it.torino.totalshop.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
+import it.torino.totalshop.utente.UtenteActivity
 import it.torino.totalshop.viewModel
 
 class LoginFragment: Fragment() {
@@ -46,6 +49,16 @@ class LoginFragment: Fragment() {
                 if(res.password.equals(pass.toString())){
                     //login
                     Toast.makeText(context,"Utente Loggato con successo.",Toast.LENGTH_SHORT).show()
+
+//                    val intent = if(userType == 0){
+//                        Intent(activity, UtenteActivity::class.java)
+//                    } else {
+//                        Intent(activity, VenditoreActivity::class.java)
+//                    }
+                    val intent = Intent(activity, UtenteActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+
                 }else{
                     Toast.makeText(context,"La password inserità non è corretta, riprova.",Toast.LENGTH_SHORT).show()
                 }
@@ -65,7 +78,7 @@ class LoginFragment: Fragment() {
         }
 
         view.findViewById<Button>(R.id.btnregistra)?.setOnClickListener {
-            Navigation.createNavigateOnClickListener(R.id.next_action, arguments)
+            findNavController().navigate(R.id.next_action,arguments)
         }
     }
     fun login(){

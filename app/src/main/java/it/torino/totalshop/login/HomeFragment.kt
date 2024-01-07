@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
 
 class HomeFragment: Fragment() {
@@ -31,12 +32,14 @@ class HomeFragment: Fragment() {
 
         view.findViewById<Button>(R.id.loginutentebtn)?.setOnClickListener {
             arg.putInt("UserType", 0)
-            Navigation.createNavigateOnClickListener(R.id.next_action, arg)
+//            Navigation.createNavigateOnClickListener(R.id.next_action, arg)
+            findNavController().navigate(R.id.next_action,arg)
         }
 
         view.findViewById<Button>(R.id.loginvenditorebtn)?.setOnClickListener {
             arg.putInt("UserType", 1)
-            Navigation.createNavigateOnClickListener(R.id.next_action, arg)
+//            Navigation.createNavigateOnClickListener(R.id.next_action, arg)
+            findNavController().navigate(R.id.next_action,arg)
         }
 
     }

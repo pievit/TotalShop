@@ -10,7 +10,7 @@ import it.torino.totalshop.roomdb.entities.UsersDataDAO
 
 @Database(
     entities = [UsersData::class, StoreData::class],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 abstract class MyRoomDb: RoomDatabase() {

@@ -98,7 +98,8 @@ class RegisterFragment: Fragment() {
         var pass = view?.findViewById<TextView>(R.id.regpass)?.text.toString()
         var ut: Boolean = if(arguments?.getInt("UserType")==1) true else false
         var phone = view?.findViewById<TextView>(R.id.regphone)?.text.toString()
-        var ud = UsersData(email,pass,phone,ut)
+        var name = view?.findViewById<TextView>(R.id.regname)?.text.toString()
+        var ud = UsersData(email,pass,name,phone,ut)
         vm?.insertUser(ud)
 
     }

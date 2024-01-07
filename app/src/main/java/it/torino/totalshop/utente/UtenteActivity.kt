@@ -28,7 +28,6 @@ class UtenteActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.backButton).setOnClickListener{
             navController.popBackStack()
-
         }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
