@@ -51,7 +51,7 @@ class RegisterFragment: Fragment() {
                         var storeName = view?.findViewById<TextView>(R.id.businessname)?.text.toString()
                         var storeAddress = view?.findViewById<TextView>(R.id.businsessaddress)?.text.toString()
                         var storeCategory = view?.findViewById<TextView>(R.id.businesscategory)?.text.toString()
-                        var storeData: StoreData = StoreData(storeName,storeAddress,storeCategory,res.email)
+                        var storeData: StoreData = StoreData(storeName,storeAddress,storeCategory,res.email,null,null)
                         vm?.insertStore(storeData)
 
                     }else{

@@ -28,4 +28,11 @@ class storeAdapter(var mList: List<StoreData>) : RecyclerView.Adapter<storeAdapt
     override fun getItemCount(): Int {
         return mList.size
     }
+
+    fun setFilteredList(mList: List<StoreData>){
+        this.mList = mList
+        notifyDataSetChanged()
+    }
+
+
 }
