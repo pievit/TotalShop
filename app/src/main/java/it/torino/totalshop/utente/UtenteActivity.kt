@@ -6,13 +6,17 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import it.torino.totalshop.LocationViewModel
 import it.torino.totalshop.R
+import it.torino.totalshop.viewModel
 
 class UtenteActivity : AppCompatActivity() {
+    var locationVM : LocationViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.utente_activity)
@@ -34,7 +38,13 @@ class UtenteActivity : AppCompatActivity() {
             Log.d("ActivityUtente", "Destination changed to ${destination.id}")
         }
 
+        this.locationVM = ViewModelProvider(this)[LocationViewModel::class.java]
 
+        this.locationVM!!.locationData.observe(this){
+                res -> Log.d("Test","Users: " + res.toString())
+        }
+
+        locationVM?.getCoord()
 
     }
 
@@ -42,6 +52,10 @@ class UtenteActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view_utente)
         bottomNav?.setupWithNavController(navController)
 
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 }
