@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.torino.totalshop.roomdb.Repository
+import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +22,11 @@ class viewModel(application: Application): AndroidViewModel(application) {
     var modelRoom: modelRoom = modelRoom(application,repository,viewModelScope)
     var usersList: MutableLiveData<MutableList<UsersData>?> = MutableLiveData<MutableList<UsersData>?>()
     var storesList: MutableLiveData<MutableList<StoreData>?> = MutableLiveData<MutableList<StoreData>?>()
+    var prodsList: MutableLiveData<MutableList<ProductsData>?> = MutableLiveData<MutableList<ProductsData>?>()
     var user: MutableLiveData<UsersData>? = MutableLiveData<UsersData>()
     var store: MutableLiveData<StoreData>? = MutableLiveData<StoreData>()
     private var prvuser: UsersData? = null
+
     var inserito: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     fun getUsers(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -113,37 +116,16 @@ class viewModel(application: Application): AndroidViewModel(application) {
        repository.dbStoreDataDAO?.insert(storeData)
     }
 
-    fun getNearStores(lat: Double,long: Double,dist: Int){
+    fun getAllProds(){
         viewModelScope.launch(Dispatchers.IO){
-            var res = getAllStores()
+            var res = getAllProdsSus()
             withContext(Dispatchers.Main){
-                if(res!=null){
-                    var nearStoreList: MutableList<StoreData>? = null
-                    for(r: StoreData in res){
-                        if(r.lat != null && r.lon != null){
-                            val R = 6371e3; // metres
-                            val var1 = lat * Math.PI/180; // φ, λ in radians
-                            val var2 = (r.lat!! * Math.PI)/180;
-                            val delt1 = (r.lat!!-lat) * Math.PI/180;
-                            val delt2 = (r.lon!!-long) * Math.PI/180;
-
-                            val a = sin(delt1/2) * sin(delt1/2) +
-                                    cos(var1) * cos(var2) *
-                                    sin(delt2/2) * sin(delt2/2);
-                            val c = 2 * atan2(sqrt(a), sqrt(1-a));
-
-                            val d = R * c; //distanza in metri
-
-                            if(d<= dist){
-                                nearStoreList?.add(r)
-                            }
-                        }
-
-                    }
-
-                    storesList.value = nearStoreList
-                }
+                prodsList.value = res
             }
         }
+    }
+
+    private suspend fun getAllProdsSus(): MutableList<ProductsData>?{
+        return repository.dbProdsDataDAO?.getAllProducts()
     }
 }

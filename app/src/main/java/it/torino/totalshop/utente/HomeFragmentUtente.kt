@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.LocationViewModel
 import it.torino.totalshop.R
+import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.storeAdapter
 import it.torino.totalshop.viewModel
@@ -29,6 +30,7 @@ class HomeFragmentUtente: Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private var mList = ArrayList<StoreData>()
+    private var prodList = ArrayList<ProductsData>()
     private lateinit var adapter: storeAdapter
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
@@ -62,6 +64,7 @@ class HomeFragmentUtente: Fragment() {
         })
 
         vm?.getStores()
+        vm?.getAllProds()
 
         vm!!.storesList.observe(viewLifecycleOwner){
                 sl ->
@@ -71,6 +74,12 @@ class HomeFragmentUtente: Fragment() {
                 adapter.setFilteredList(mList)
                 locationVM?.getCoord()
             }
+        }
+
+        vm!!.prodsList.observe(viewLifecycleOwner){
+            pl ->
+            Log.d("Test", pl.toString())
+            prodList = pl as ArrayList<ProductsData>
         }
 
 
@@ -109,15 +118,16 @@ class HomeFragmentUtente: Fragment() {
     }
 
     private fun updateList(newText: String?){
-        val newList = ArrayList<StoreData?>()
+        var negList: ArrayList<StoreData> = ArrayList()
         if(newText!=null){
-            for(i in mList){
-                if(i.storeName.contains(newText as CharSequence,true) || i.storeCategory.contains(newText as CharSequence,true)){
-                    newList.add(i)
-                }
+            var neg = mList.filter {
+                negozio -> negozio.storeName.contains(newText as CharSequence,true) ||
+                    prodList.any {
+                        prodotto -> prodotto.storeId == negozio.id && prodotto.name.contains(newText as CharSequence,true)
+                    }
             }
         }
-        adapter.setFilteredList(newList as List<StoreData>)
+        adapter.setFilteredList(negList)
 
     }
 }
