@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/venditore_nav_graph"
+xmlns:tools="http://schemas.android.com/tools"
+app:startDestination="@id/venditore_home">
+<fragment
+    android:id="@+id/venditore_home"
+    android:name="it.torino.totalshop.venditore.HomeFragmentVenditore"
+    tools:layout="@layout/venditore_home">
+</fragment>
+
+<fragment
+    android:id="@+id/venditore_settings"
+    android:name="it.torino.totalshop.venditore.SettingsFragmentVenditore"
+    tools:layout="@layout/user_settings">
+    <!--            <argument-->
+    <!--                android:name="UserData"-->
+    <!--                app:argType="UsersData"-->
+    <!--                app:nullable="true"/>-->
+
+</fragment>
+<fragment
+    android:id="@+id/venditore_ordini"
+    android:name="it.torino.totalshop.venditore.OrdiniFragmentVenditore"
+    tools:layout="@layout/venditore_ordini">
+    <!--            <argument-->
+    <!--                android:name="UserData"-->
+    <!--                app:argType="UsersData"-->
+    <!--                app:nullable="true"/>-->
+
+</fragment>
+
+</navigation>
