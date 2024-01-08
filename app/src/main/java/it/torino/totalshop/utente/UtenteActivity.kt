@@ -1,12 +1,16 @@
 package it.torino.totalshop.utente
 
 
+import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,7 +21,7 @@ import it.torino.totalshop.R
 import it.torino.totalshop.viewModel
 
 class UtenteActivity : AppCompatActivity() {
-    var locationVM : LocationViewModel? = ViewModelProvider(this)[LocationViewModel::class.java]
+    var locationVM : LocationViewModel? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.utente_activity)
@@ -31,19 +35,55 @@ class UtenteActivity : AppCompatActivity() {
         val navController = host.navController
         setupBottomNavMenu(navController)
 
-
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d("ActivityUtente", "Destination changed to ${destination.id}")
         }
 
-        this.locationVM!!.locationData.observe(this){
-                res -> Log.d("Test","Users: " + res.toString())
+        locationVM = ViewModelProvider(this)[LocationViewModel::class.java]
+
+
+
+
+        if (ActivityCompat.checkSelfPermission(
+                application,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                application,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                AlertDialog.Builder(this)
+                    .setTitle("Necessaria autorizzazione posizione esatta")
+                    .setMessage("Per funzionare correttamente, l'applicazione necessita l'autorizzazione per accedere alla posizione precisa")
+                    .setPositiveButton(
+                        "OK"
+                    ) { _, _ ->
+                        //Prompt the user once explanation has been shown
+                        requestLocationPermission()
+                    }
+                    .create()
+                    .show()
+            } else {
+                // No explanation needed, we can request the permission.
+                requestLocationPermission()
+            }
+
+        }else{
+            Log.d("Test","start ls" )
+            locationVM?.startLocationService()
         }
-
-        locationVM?.getCoord()
-
     }
+
+
 
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view_utente)
@@ -73,4 +113,13 @@ class UtenteActivity : AppCompatActivity() {
         locationVM?.stopLocationUpdates()
     }
 
+    fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+            ),
+            locationVM!!.MY_PERMISSIONS_REQUEST_LOCATION
+        )
+    }
 }
