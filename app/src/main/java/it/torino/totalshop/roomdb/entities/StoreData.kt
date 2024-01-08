@@ -15,6 +15,6 @@ class StoreData(var storeName:String,var storeAddress: String,var storeCategory:
 
 
     override fun toString(): String {
-        return "ID: "+id+", StoreName: "+storeName+", Address: "+storeAddress+", Category: "+storeCategory+", Owner: "+owner
+        return "ID: "+id+", StoreName: "+storeName+", Address: "+storeAddress+", Category: "+storeCategory+", Owner: "+owner+",Longitude: "+lon+", Latitude: "+lat
     }
 }
