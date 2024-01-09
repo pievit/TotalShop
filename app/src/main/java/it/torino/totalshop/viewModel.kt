@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.torino.totalshop.roomdb.Repository
+import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
@@ -23,6 +24,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     var usersList: MutableLiveData<MutableList<UsersData>?> = MutableLiveData<MutableList<UsersData>?>()
     var storesList: MutableLiveData<MutableList<StoreData>?> = MutableLiveData<MutableList<StoreData>?>()
     var prodsList: MutableLiveData<MutableList<ProductsData>?> = MutableLiveData<MutableList<ProductsData>?>()
+    var ordList: MutableLiveData<MutableList<OrdersData>?> = MutableLiveData<MutableList<OrdersData>?>()
     var user: MutableLiveData<UsersData>? = MutableLiveData<UsersData>()
     var store: MutableLiveData<StoreData>? = MutableLiveData<StoreData>()
     private var prvuser: UsersData? = null
@@ -163,5 +165,31 @@ class viewModel(application: Application): AndroidViewModel(application) {
 
     private suspend fun deleteProdSus(prod: ProductsData){
         repository.dbProdsDataDAO?.delete(prod)
+    }
+
+    fun getAllOrdersFromStoreID(id: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            var res = getAllOrdStoreSus(id)
+            withContext(Dispatchers.Main){
+                ordList.value = res
+            }
+        }
+    }
+
+    private suspend fun getAllOrdStoreSus(id:Int): MutableList<OrdersData>? {
+        return repository.dbOrdersDataDAO?.getOrdersFromStoreID(id)
+    }
+
+    fun getAllOrdersFromEmail(email: String){
+        viewModelScope.launch(Dispatchers.IO){
+            var res = getAllOrdEmailSus(email)
+            withContext(Dispatchers.Main){
+                ordList.value = res
+            }
+        }
+    }
+
+    private suspend fun getAllOrdEmailSus(email: String): MutableList<OrdersData>? {
+        return repository.dbOrdersDataDAO?.getOrdersFromMail(email)
     }
 }
