@@ -17,6 +17,9 @@ interface ProductsDataDAO {
     @Query("SELECT * FROM ProductsData WHERE ProductsData.storeId=:storeId")
     fun getStoreProducts(storeId:Int): MutableList<ProductsData>?
 
+    @Query("SELECT * FROM ProductsData")
+    fun getAllProducts(): MutableList<ProductsData>?
+
     @Delete
     fun delete(productsData: ProductsData)
 
