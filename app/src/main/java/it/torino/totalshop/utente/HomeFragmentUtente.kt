@@ -118,9 +118,9 @@ class HomeFragmentUtente: Fragment() {
     }
 
     private fun updateList(newText: String?){
-        var negList: ArrayList<StoreData> = ArrayList()
+        var negList: List<StoreData> = ArrayList()
         if(newText!=null){
-            var neg = mList.filter {
+             negList = mList.filter {
                 negozio -> negozio.storeName.contains(newText as CharSequence,true) ||
                     prodList.any {
                         prodotto -> prodotto.storeId == negozio.id && prodotto.name.contains(newText as CharSequence,true)

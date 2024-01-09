@@ -19,7 +19,6 @@ import it.torino.totalshop.R
 class VenditoreActivity : AppCompatActivity() {
 
     var locationVM : LocationViewModel? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.venditore_activity)
@@ -32,7 +31,8 @@ class VenditoreActivity : AppCompatActivity() {
         val navController = host.navController
         setupBottomNavMenu(navController)
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, argument ->
+
             Log.d("ActivityVenditore", "Destination changed to ${destination.id}")
         }
         locationVM = ViewModelProvider(this)[LocationViewModel::class.java]
@@ -117,5 +117,9 @@ class VenditoreActivity : AppCompatActivity() {
             ),
             locationVM!!.MY_PERMISSIONS_REQUEST_LOCATION
         )
+    }
+
+    fun deleteProd(id: Int){
+
     }
 }

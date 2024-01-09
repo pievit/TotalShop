@@ -128,4 +128,40 @@ class viewModel(application: Application): AndroidViewModel(application) {
     private suspend fun getAllProdsSus(): MutableList<ProductsData>?{
         return repository.dbProdsDataDAO?.getAllProducts()
     }
+
+
+    fun getAllProdsFromStore(id: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            var res = getAllProdsFromStoreSus(id)
+            withContext(Dispatchers.Main){
+                prodsList.value = res
+            }
+        }
+    }
+
+    private suspend fun getAllProdsFromStoreSus(id: Int): MutableList<ProductsData>?{
+      return repository.dbProdsDataDAO?.getStoreProducts(id)
+    }
+
+    fun insertProd(prodData: ProductsData){
+        viewModelScope.launch(Dispatchers.IO){
+            insertProduct(prodData)
+            getAllProdsFromStore(prodData.storeId)
+        }
+    }
+
+    private suspend fun insertProduct(prod: ProductsData){
+        repository.dbProdsDataDAO?.insert(prod)
+    }
+
+    fun deleteProd(prod: ProductsData){
+        viewModelScope.launch(Dispatchers.IO){
+            deleteProdSus(prod)
+            getAllProdsFromStore(prod.storeId)
+        }
+    }
+
+    private suspend fun deleteProdSus(prod: ProductsData){
+        repository.dbProdsDataDAO?.delete(prod)
+    }
 }
