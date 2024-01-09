@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
 import it.torino.totalshop.utente.UtenteActivity
+import it.torino.totalshop.venditore.VenditoreActivity
 import it.torino.totalshop.viewModel
 
 class LoginFragment: Fragment() {
@@ -49,14 +50,15 @@ class LoginFragment: Fragment() {
                 if(res.password.equals(pass.toString())){
                     //login
                     Toast.makeText(context,"Utente Loggato con successo.",Toast.LENGTH_SHORT).show()
-
-//                    val intent = if(userType == 0){
-//                        Intent(activity, UtenteActivity::class.java)
-//                    } else {
-//                        Intent(activity, VenditoreActivity::class.java)
-//                    }
-                    val intent = Intent(activity, UtenteActivity::class.java)
+                    var intent: Intent
+                    if(arguments?.getInt("UserType")==0){
+                        intent = Intent(activity, UtenteActivity::class.java)
+                    }else{
+                        intent = Intent(activity,VenditoreActivity::class.java)
+                    }
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.putExtra("email",vm!!.user!!.value!!.email)
                     startActivity(intent)
 
                 }else{

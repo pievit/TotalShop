@@ -13,11 +13,7 @@ class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> U
     inner class StoresViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val logo : ImageView = itemView.findViewById(R.id.storeLogo)
         val storeName : TextView = itemView.findViewById(R.id.storeName)
-        init {
-            itemView.setOnClickListener{
 
-            }
-        }
 
     }
 
