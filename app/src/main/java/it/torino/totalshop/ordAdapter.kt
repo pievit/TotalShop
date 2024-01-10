@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
+import java.lang.Float
 
 class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) -> Unit) : RecyclerView.Adapter<ordAdapter.OrdViewHolder>(){
 
@@ -25,12 +26,14 @@ class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) ->
     }
 
     override fun onBindViewHolder(holder: OrdViewHolder, position: Int) {
-        var c = ordList[position].listaProd.prods.size
+        var c = ordList[position].listaProd.prods.values.sum()
         var item = ordList[position]
         holder.stato.text = ordList[position].status
 //        holder.dataOrd.text = ordList[position].data
+
         holder.countTot.text = if (c > 1) {"$c articoli"} else {"$c articolo"}
-        var sum = ordList[position].listaProd.prods.sumOf { prod -> prod.price.toDouble() }
+
+        var sum = ordList[position].listaProd.prods.keys.sumOf { it.price.toDouble() }
         holder.prezzoTot.text = sum.toString() + "€"
 
         holder.itemView.setOnClickListener{
