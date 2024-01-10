@@ -1,5 +1,6 @@
 package it.torino.totalshop.venditore
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.venditore.OrdiniFragmentVenditore
@@ -21,9 +23,16 @@ class DettagliFragmentVenditore : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         val view = inflater.inflate(R.layout.venditore_ordini_info, container, false)
         Log.d("Test","ok")
+        view.findViewById<FloatingActionButton>(R.id.floatingbtn).setOnClickListener {
+            childFragmentManager.popBackStack("ord_info_list",0)
+        }
+        if(isOrientationPortrait()){
+            view.findViewById<FloatingActionButton>(R.id.floatingbtn).visibility = View.INVISIBLE
+        }else{
+            view.findViewById<FloatingActionButton>(R.id.floatingbtn).visibility = View.VISIBLE
+        }
         return view
     }
 
@@ -43,4 +52,8 @@ class DettagliFragmentVenditore : Fragment() {
 
     }
 
+    fun isOrientationPortrait(): Boolean {
+        val orientation = resources.configuration.orientation
+        return orientation == Configuration.ORIENTATION_PORTRAIT
+    }
 }

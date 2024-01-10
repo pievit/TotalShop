@@ -92,6 +92,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/prod_title"
+        android:maxLines="20"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="3dp"
         android:layout_marginTop="3dp"
@@ -109,5 +110,12 @@
         app:layout_constraintTop_toBottomOf="@id/ord_inf_prodlist"
         android:id="@+id/ord_inf_totprice"
         android:layout_marginEnd="10dp"/>
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/floatingbtn"
+        android:src="@drawable/ic_shortcut_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="Button indietro" />
 </androidx.constraintlayout.widget.ConstraintLayout>

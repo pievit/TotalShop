@@ -51,10 +51,11 @@ class OrdersListFragmentVenditore : Fragment() {
 //                setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 //                commit()
             } else {
-
+                //due pagine diverse
                 with(childFragmentManager.beginTransaction()) {
                     replace(R.id.ordiniListFragment, frag2 )
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    addToBackStack("ord_info_list")
                     commit()
                 }
             }
