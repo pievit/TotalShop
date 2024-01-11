@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.LocationViewModel
@@ -32,6 +33,7 @@ class HomeFragmentUtente: Fragment() {
     private var mList = ArrayList<StoreData>()
     private var prodList = ArrayList<ProductsData>()
     private lateinit var adapter: storeAdapter
+    var listProdOrdersFlag = UtenteProdListOrders()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
         locationVM = ViewModelProvider(requireActivity())[LocationViewModel::class.java]
@@ -46,9 +48,13 @@ class HomeFragmentUtente: Fragment() {
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-//        addDataToList()
+
         adapter = storeAdapter(mList) { selectedItem ->
-            Log.d("Item clicked: ",selectedItem.toString())
+//            Log.d("Item clicked: ",selectedItem.toString())
+            arguments?.putInt("storeId",selectedItem.id)
+            arguments?.putString("storeName",selectedItem.storeName)
+            findNavController().navigate(R.id.utente_prod_sel,arguments)
+
         }
         recyclerView.adapter = adapter
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -68,7 +74,6 @@ class HomeFragmentUtente: Fragment() {
 
         vm!!.storesList.observe(viewLifecycleOwner){
                 sl ->
-            Log.d("debug",sl.toString())
             if(sl!=null){
                 mList = sl as ArrayList<StoreData>
                 adapter.setFilteredList(mList)
@@ -78,7 +83,6 @@ class HomeFragmentUtente: Fragment() {
 
         vm!!.prodsList.observe(viewLifecycleOwner){
             pl ->
-            Log.d("Test", pl.toString())
             prodList = pl as ArrayList<ProductsData>
         }
 

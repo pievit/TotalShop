@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(indices = [Index(value = ["id","owner"], unique=true)], foreignKeys = [ForeignKey(UsersData::class, arrayOf("email") ,arrayOf("owner"), ForeignKey.CASCADE)])
-class StoreData(var storeName:String,var storeAddress: String,var storeCategory: String, var owner: String,var lon: Double? = null,var lat: Double? = null) {
+class StoreData(var storeName:String,var storeAddress: String,var storeCategory: String, var owner: String,var lat: Double? = null,var lon: Double? = null) {
     @PrimaryKey(autoGenerate = true)
     @NonNull
     var id: Int = 0

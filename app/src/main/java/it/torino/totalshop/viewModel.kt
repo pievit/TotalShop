@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import it.torino.totalshop.roomdb.Repository
+import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
@@ -26,7 +27,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     var user: MutableLiveData<UsersData>? = MutableLiveData<UsersData>()
     var store: MutableLiveData<StoreData>? = MutableLiveData<StoreData>()
     private var prvuser: UsersData? = null
-
+    var newProd: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     var inserito: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     fun getUsers(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -133,6 +134,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     fun getAllProdsFromStore(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             var res = getAllProdsFromStoreSus(id)
+
             withContext(Dispatchers.Main){
                 prodsList.value = res
             }
@@ -163,5 +165,18 @@ class viewModel(application: Application): AndroidViewModel(application) {
 
     private suspend fun deleteProdSus(prod: ProductsData){
         repository.dbProdsDataDAO?.delete(prod)
+    }
+
+    fun insertOrder(ord: OrdersData){
+        viewModelScope.launch(Dispatchers.IO){
+            insertOrderSus(ord)
+            withContext(Dispatchers.Main){
+                newProd!!.value = true
+            }
+        }
+    }
+
+    private suspend fun insertOrderSus(ord: OrdersData){
+        repository.dbOrdersDataDAO?.insert(ord)
     }
 }

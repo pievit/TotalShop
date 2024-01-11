@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.torino.totalshop.LocationViewModel
@@ -37,7 +38,11 @@ class UtenteActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d("ActivityUtente", "Destination changed to ${destination.id}")
+//            if(host.navController.currentDestination?.displayName=="utente_prod_sel"){
+//                host.navController.popBackStack()
+//            }
         }
+
 
         locationVM = ViewModelProvider(this)[LocationViewModel::class.java]
 
@@ -88,6 +93,10 @@ class UtenteActivity : AppCompatActivity() {
     private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view_utente)
         bottomNav?.setupWithNavController(navController)
+        bottomNav?.setOnItemReselectedListener {
+            navController.navigate(it.itemId)
+            Log.d("Test",it.itemId.toString())
+        }
 
     }
 
