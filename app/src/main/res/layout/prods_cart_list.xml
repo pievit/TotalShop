@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="8dp"
+    app:cardUseCompatPadding="true"
+    android:layout_marginHorizontal="8dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/prodNameCart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:text="Prod Name"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/prodDescCart"
+            app:layout_constraintEnd_toStartOf="@id/deleteProdCart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/deleteProdCart"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/prodQuantityCart"
+            app:layout_constraintStart_toEndOf="@id/prodNameCart"
+            android:src="@drawable/remove_shopping_cart_24px"
+            android:contentDescription="Rimuovi Prodotto"
+            android:scaleType="fitXY"/>
+
+
+        <TextView
+            android:id="@+id/prodDescCart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Prod Desc"
+            android:textSize="16sp"
+            android:layout_marginStart="30dp"
+            android:textStyle="normal"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/deleteProdCart"
+            app:layout_constraintBottom_toTopOf="@id/prodPriceCart"
+            app:layout_constraintTop_toBottomOf="@id/prodNameCart" />
+
+        <TextView
+            android:id="@+id/prodPriceCart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Prod Price"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_weight="2"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/prodQuantityCart"
+            app:layout_constraintTop_toBottomOf="@id/prodDescCart" />
+
+        <TextView
+            android:id="@+id/prodQuantityCart"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_weight="1"
+            android:layout_marginTop="19dp"
+            android:layout_height="wrap_content"
+            android:text="Quantità: "
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/prodPriceCart"
+            app:layout_constraintTop_toBottomOf="@id/deleteProdCart"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

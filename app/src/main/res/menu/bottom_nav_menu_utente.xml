@@ -12,4 +12,9 @@
         android:id="@id/utente_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings" />
+    <item
+        android:id="@id/utente_prod_sel"
+        android:title="Utente_prod_sel_NON_VISUAL"
+        android:visible="false"/>
+
 </menu>

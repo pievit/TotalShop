@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<TextView
+    android:id="@+id/titleDialogAddProd"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:text="Seleziona la quantità del prodotto"
+    android:textSize="20dp"
+    android:textColor="@color/white"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:textAlignment="center"
+    android:elegantTextHeight="true"
+    android:background="@color/colorPrimaryDark"
+    />
+
+    <TextView
+        android:id="@+id/prodReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Prodotto 7.50€"
+        app:layout_constraintTop_toBottomOf="@+id/titleDialogAddProd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        />
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:backgroundTint="@color/design_default_color_primary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prodReminder"
+        >
+
+        <ImageButton
+            android:id="@+id/butDecQuan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/Gray"
+            app:cornerRadius="3dp"
+            android:src="@drawable/arrow_back_ios_24px"
+            android:paddingStart="20dp"
+            android:textColor="@color/black"
+
+            />
+
+        <TextView
+            android:id="@+id/prodQuant"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textSize="25dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:elegantTextHeight="true"
+            />
+
+        <ImageButton
+            android:id="@+id/butIncQuan"
+            android:layout_width="wrap_content"
+            android:backgroundTint="@color/Gray"
+            android:layout_height="match_parent"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:src="@drawable/arrow_forward_ios_24px"
+            app:cornerRadius = "3dp"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textsubTotPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/linear"
+        app:layout_constraintTop_toBottomOf="@+id/prodReminder"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="SubTotale: "
+        android:layout_marginTop="20dp"
+        />
+    <TextView
+        android:id="@+id/subTotPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textsubTotPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/linear"
+        android:text="7,50 €"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        />
+
+
+    <Button
+        android:id="@+id/butIndietroQuant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Indietro"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/LightGray"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:cornerRadius = "3dp"
+        />
+
+    <Button
+        android:id="@+id/butAddtoCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aggiungi al Carrello"
+        android:backgroundTint="@color/design_default_color_primary"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
+        app:layout_constraintStart_toEndOf="@id/butIndietroQuant"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="15dp"
+        app:cornerRadius = "3dp"
+        android:layout_marginBottom="15dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
