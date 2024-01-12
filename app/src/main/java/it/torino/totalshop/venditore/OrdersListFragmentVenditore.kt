@@ -43,7 +43,7 @@ class OrdersListFragmentVenditore : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         adapter = ordAdapter(ordList) { selectedItem ->
             frag2.order = selectedItem
-            if(isOrientationPortrait()){
+            if(isOrientationLandscape()){
                 //carica nel fragment
                 frag2.update()
 //                val newDetails = DettagliFragmentVenditore.newInstance(myCourseCode)
@@ -52,7 +52,7 @@ class OrdersListFragmentVenditore : Fragment() {
 //                commit()
             } else {
                 //due pagine diverse
-                with(childFragmentManager.beginTransaction()) {
+                with(parentFragmentManager.beginTransaction()) {
                     replace(R.id.ordiniListFragment, frag2 )
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     addToBackStack("ord_info_list")
@@ -62,23 +62,27 @@ class OrdersListFragmentVenditore : Fragment() {
             Log.d("Item clicked: ",selectedItem.toString())
         }
         recyclerView.adapter = adapter
+        Log.d("Test", requireActivity().intent.getStringExtra("email")!!)
         vm?.getStore(requireActivity().intent.getStringExtra("email")!!)
         vm?.store?.observe(viewLifecycleOwner){
                 store ->
             myStore = store
+            Log.d("Test",myStore.storeName)
             vm?.getAllOrdersFromStoreID(myStore.id)
         }
         vm!!.ordList.observe(viewLifecycleOwner){
                 pl ->
+            Log.d("Test","qui")
             if(pl!=null){
+                Log.d("Test",pl.toString())
                 ordList = pl as ArrayList<OrdersData>
                 adapter.setFilteredList(ordList)
             }
         }
     }
 
-    fun isOrientationPortrait(): Boolean {
+    fun isOrientationLandscape(): Boolean {
         val orientation = resources.configuration.orientation
-        return orientation == Configuration.ORIENTATION_PORTRAIT
+        return orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 }

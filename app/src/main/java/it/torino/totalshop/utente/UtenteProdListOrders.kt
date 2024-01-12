@@ -2,6 +2,7 @@ package it.torino.totalshop.utente
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.JsonWriter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import it.torino.totalshop.ProdsCartAdapter
 import it.torino.totalshop.ProdsOrdersAdapter
 import it.torino.totalshop.R
@@ -28,6 +31,7 @@ import it.torino.totalshop.roomdb.ProdsList
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.viewModel
+import java.io.StringWriter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -150,8 +154,8 @@ class UtenteProdListOrders: Fragment() {
     }
 
     fun addProdToCart(prod: ProductsData){
+        prodMap[prod] = dialogView.findViewById<TextView>(R.id.prodQuant).text.toString().toInt()
 
-        prodMap.put(prod,dialogView.findViewById<TextView>(R.id.prodQuant).text.toString().toInt())
         view?.findViewById<FloatingActionButton>(R.id.floatingCart)?.visibility = VISIBLE
         addDialog.dismiss()
     }
@@ -197,8 +201,9 @@ class UtenteProdListOrders: Fragment() {
         val orderDate = df.format(currentDate)
         val usermail = requireActivity().intent.getStringExtra("email")!!
         val storeId = requireArguments().getInt("storeId")
-        val orderedProd: ProdsList = ProdsList(prodMap)
-        val order = OrdersData(orderedProd,usermail,storeId,"nuovo","",orderDate)
+//        val type = object : TypeToken<Map<ProductsData, Int>>() {}.type
+        val orderedProd: String = Gson().toJson(prodMap.toMap())
+        val order = OrdersData(orderedProd,usermail,storeId,"nuovo","Primo ordine",orderDate)
         vm?.insertOrder(order)
 
 

@@ -196,6 +196,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     fun insertOrder(ord: OrdersData){
         viewModelScope.launch(Dispatchers.IO){
             insertOrderSus(ord)
+            getAllOrdersFromEmail(ord.usermail)
             withContext(Dispatchers.Main){
                 newProd!!.value = true
             }

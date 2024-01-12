@@ -33,8 +33,9 @@ class OrdiniFragmentVenditore : Fragment() {
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
 
 
-        if(isOrientationPortrait()){
+        if(isOrientationLandscape()){
             var fm = childFragmentManager.beginTransaction()
+            Log.d("Test","landscape")
             fm.add(R.id.ordiniListFragment,frag1)
 //            fm.commit()
 //            fm = childFragmentManager.beginTransaction()
@@ -47,6 +48,7 @@ class OrdiniFragmentVenditore : Fragment() {
 //                setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
 //                commit()
         } else {
+            Log.d("Test","NOT landscape")
             with(childFragmentManager.beginTransaction()) {
                 replace(R.id.ordiniListFragment, frag1 )
 //                    arguments?.putBundle("OrderInfo", bun)
@@ -64,9 +66,9 @@ class OrdiniFragmentVenditore : Fragment() {
         return view
     }
 
-    fun isOrientationPortrait(): Boolean {
+    fun isOrientationLandscape(): Boolean {
         val orientation = resources.configuration.orientation
-        return orientation == Configuration.ORIENTATION_PORTRAIT
+        return orientation == Configuration.ORIENTATION_LANDSCAPE
     }
 
 
