@@ -24,6 +24,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     var usersList: MutableLiveData<MutableList<UsersData>?> = MutableLiveData<MutableList<UsersData>?>()
     var storesList: MutableLiveData<MutableList<StoreData>?> = MutableLiveData<MutableList<StoreData>?>()
     var prodsList: MutableLiveData<MutableList<ProductsData>?> = MutableLiveData<MutableList<ProductsData>?>()
+    var ordList: MutableLiveData<MutableList<OrdersData>?> = MutableLiveData<MutableList<OrdersData>?>()
     var user: MutableLiveData<UsersData>? = MutableLiveData<UsersData>()
     var store: MutableLiveData<StoreData>? = MutableLiveData<StoreData>()
     private var prvuser: UsersData? = null
@@ -134,7 +135,6 @@ class viewModel(application: Application): AndroidViewModel(application) {
     fun getAllProdsFromStore(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             var res = getAllProdsFromStoreSus(id)
-
             withContext(Dispatchers.Main){
                 prodsList.value = res
             }
@@ -167,9 +167,36 @@ class viewModel(application: Application): AndroidViewModel(application) {
         repository.dbProdsDataDAO?.delete(prod)
     }
 
+    fun getAllOrdersFromStoreID(id: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            var res = getAllOrdStoreSus(id)
+            withContext(Dispatchers.Main){
+                ordList.value = res
+            }
+        }
+    }
+
+    private suspend fun getAllOrdStoreSus(id:Int): MutableList<OrdersData>? {
+        return repository.dbOrdersDataDAO?.getOrdersFromStoreID(id)
+    }
+
+    fun getAllOrdersFromEmail(email: String){
+        viewModelScope.launch(Dispatchers.IO){
+            var res = getAllOrdEmailSus(email)
+            withContext(Dispatchers.Main){
+                ordList.value = res
+            }
+        }
+    }
+
+    private suspend fun getAllOrdEmailSus(email: String): MutableList<OrdersData>? {
+        return repository.dbOrdersDataDAO?.getOrdersFromMail(email)
+    }
+
     fun insertOrder(ord: OrdersData){
         viewModelScope.launch(Dispatchers.IO){
             insertOrderSus(ord)
+            getAllOrdersFromEmail(ord.usermail)
             withContext(Dispatchers.Main){
                 newProd!!.value = true
             }

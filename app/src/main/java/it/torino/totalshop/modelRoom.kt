@@ -14,8 +14,7 @@ class modelRoom(val context: Context,val repository:Repository, viewModelScope: 
 
         viewModelScope.launch(Dispatchers.IO) {
             //prova db
-            deleteAll()
-            var ud = UsersData("gv@gmail.com","venggeng","gianni","3334445566",userType = false)
+            var ud = UsersData("gv@gmail.com","gvgv","gianni","3334445566",userType = false)
             insertIntoDB(ud)
             Log.d("debug","qui")
         }

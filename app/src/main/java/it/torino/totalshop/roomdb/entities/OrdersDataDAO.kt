@@ -18,7 +18,7 @@ interface OrdersDataDAO {
     fun getOrdersFromMail(email: String): MutableList<OrdersData>?
 
     @Query("SELECT * FROM OrdersData WHERE storeId=:id")
-    fun getOrdersFromStoreID(id: Int): OrdersData?
+    fun getOrdersFromStoreID(id: Int): MutableList<OrdersData>?
 
     @Delete
     fun delete(ordersData: OrdersData)

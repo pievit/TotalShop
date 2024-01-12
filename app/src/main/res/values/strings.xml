@@ -4,4 +4,7 @@
     <string name="home">Home</string>
     <string name="utente_orders">Orders</string>
     <string name="settings">Settings</string>
+    <string name="stato_ordine">Stato Ordine</string>
+    <string name="long_comment">commento molto lungo che serve a riempire una textview che dovrebbe contenere varie info o descrizioni, quindi serve per vedere in fase di costruzione della pagina come verrebbe vista la pagina nel caso di commenti molto lunghi</string>
+    <string name="example_prod_list">prodotto 1 * 2\t\t\t15€ \nprodotto 2 * 1\t\t\t5€ \nprodotto 3 * 5\t\t\t20€ \nprodotto 4 * 1\t\t\t2.1€ \nprodotto 5 * 1\t\t\t15€ \nprodotto 6 * 2\t\t\t6.8€</string>
 </resources>
