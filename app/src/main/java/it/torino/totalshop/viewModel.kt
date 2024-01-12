@@ -28,7 +28,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     var user: MutableLiveData<UsersData>? = MutableLiveData<UsersData>()
     var store: MutableLiveData<StoreData>? = MutableLiveData<StoreData>()
     private var prvuser: UsersData? = null
-
+    var newProd: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     var inserito: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     fun getUsers(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -135,6 +135,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     fun getAllProdsFromStore(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             var res = getAllProdsFromStoreSus(id)
+
             withContext(Dispatchers.Main){
                 prodsList.value = res
             }
@@ -167,6 +168,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
         repository.dbProdsDataDAO?.delete(prod)
     }
 
+
     fun getAllOrdersFromStoreID(id: Int){
         viewModelScope.launch(Dispatchers.IO){
             var res = getAllOrdStoreSus(id)
@@ -191,5 +193,18 @@ class viewModel(application: Application): AndroidViewModel(application) {
 
     private suspend fun getAllOrdEmailSus(email: String): MutableList<OrdersData>? {
         return repository.dbOrdersDataDAO?.getOrdersFromMail(email)
+
+    fun insertOrder(ord: OrdersData){
+        viewModelScope.launch(Dispatchers.IO){
+            insertOrderSus(ord)
+            withContext(Dispatchers.Main){
+                newProd!!.value = true
+            }
+        }
+    }
+
+    private suspend fun insertOrderSus(ord: OrdersData){
+        repository.dbOrdersDataDAO?.insert(ord)
+
     }
 }

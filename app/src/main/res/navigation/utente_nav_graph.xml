@@ -8,8 +8,23 @@
             android:id="@+id/utente_home"
             android:name="it.torino.totalshop.utente.HomeFragmentUtente"
             tools:layout="@layout/utente_home">
+                <argument
+                    android:name="storeName"
+                    app:argType="string"/>
+                <argument
+                    android:name="storeId"
+                    app:argType="integer"/>
+                <action
+                    android:id="@+id/next_action"
+                    app:destination="@+id/utente_prod_sel">
+                </action>
         </fragment>
 
+        <fragment
+            android:id="@+id/utente_prod_sel"
+            android:name="it.torino.totalshop.utente.UtenteProdListOrders"
+            tools:layout="@layout/utente_prodlist_ord">
+        </fragment>
         <fragment
             android:id="@+id/utente_settings"
             android:name="it.torino.totalshop.utente.SettingsFragment"
