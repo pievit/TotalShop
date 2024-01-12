@@ -47,11 +47,13 @@ class DettagliFragmentVenditore : Fragment() {
 //        view?.findViewById<TextView>(R.id.ord_inf_data)?.text = order?.dataOrd
         view?.findViewById<TextView>(R.id.ord_inf_status)?.text = order?.status
         view?.findViewById<TextView>(R.id.ord_inf_commento)?.text = order?.comment
-        view?.findViewById<TextView>(R.id.ord_inf_totprice)?.text = order?.listaProd!!.prods.keys.sumOf { it.price.toDouble() }.toString()
+        view?.findViewById<TextView>(R.id.ord_inf_totprice)?.text = order?.listaProd!!.prods.keys.joinToString{
+                key ->
+            (key.price*order?.listaProd!!.prods.get(key)!!).toString()
+        }
         view?.findViewById<TextView>(R.id.ord_inf_prodlist)?.text = order?.listaProd!!.toString()
 
     }
-
     fun isOrientationPortrait(): Boolean {
         val orientation = resources.configuration.orientation
         return orientation == Configuration.ORIENTATION_PORTRAIT

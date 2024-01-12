@@ -33,7 +33,10 @@ class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) ->
 
         holder.countTot.text = if (c > 1) {"$c articoli"} else {"$c articolo"}
 
-        var sum = ordList[position].listaProd.prods.keys.sumOf { it.price.toDouble() }
+        var sum = ordList[position].listaProd.prods.keys.sumOf{
+                key ->
+            (key.price * ordList[position].listaProd.prods.get(key)!!).toDouble()
+        }
         holder.prezzoTot.text = sum.toString() + "€"
 
         holder.itemView.setOnClickListener{
