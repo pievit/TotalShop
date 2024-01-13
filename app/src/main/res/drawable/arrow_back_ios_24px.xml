@@ -4,6 +4,7 @@
     android:viewportWidth="960"
     android:viewportHeight="960"
     android:autoMirrored="true">
+
   <path
       android:fillColor="@color/black"
       android:pathData="M400,880L0,480L400,80L471,151L142,480L471,809L400,880Z"/>

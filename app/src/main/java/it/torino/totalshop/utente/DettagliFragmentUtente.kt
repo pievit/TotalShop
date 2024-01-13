@@ -1,4 +1,4 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.utente
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -15,12 +15,11 @@ import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.ProdsList
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.venditore.OrdiniFragmentVenditore
 import it.torino.totalshop.viewModel
 import org.apache.commons.text.StringEscapeUtils
 import kotlin.math.roundToInt
 
-class DettagliFragmentVenditore : Fragment() {
+class DettagliFragmentUtente : Fragment() {
     var vm: viewModel? = null
     var order : OrdersData? = null
 
@@ -29,14 +28,14 @@ class DettagliFragmentVenditore : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.venditore_ordini_info, container, false)
-        view.findViewById<FloatingActionButton>(R.id.vendor_floatingbtn).setOnClickListener {
+        val view = inflater.inflate(R.layout.utente_ordini_info, container, false)
+        view.findViewById<FloatingActionButton>(R.id.user_floatingbtn).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
         if(isOrientationLandscape()){
-            view.findViewById<FloatingActionButton>(R.id.vendor_floatingbtn).visibility = View.INVISIBLE
+            view.findViewById<FloatingActionButton>(R.id.user_floatingbtn).visibility = View.INVISIBLE
         }else{
-            view.findViewById<FloatingActionButton>(R.id.vendor_floatingbtn).visibility = View.VISIBLE
+            view.findViewById<FloatingActionButton>(R.id.user_floatingbtn).visibility = View.VISIBLE
         }
         return view
     }
@@ -46,8 +45,15 @@ class DettagliFragmentVenditore : Fragment() {
             update()
         }
 
+        vm?.store?.observe(viewLifecycleOwner){
+            store->
+            view.findViewById<TextView>(R.id.user_ord_inf_store)?.text = store.storeName
+        }
+
     }
     fun update(){
+
+        vm?.getStoreFromId(order!!.storeId)
         var lp = order?.listaProd
         if(lp?.length!=0) {
             lp = StringEscapeUtils.unescapeJava(lp)
@@ -63,18 +69,18 @@ class DettagliFragmentVenditore : Fragment() {
                 )
                 prods[p] = objectMap.get(it)!!
             }
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_email)?.text = order?.usermail
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_id)?.text = "Ordine N." + order?.id
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_data)?.text = order?.dataOrd
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_status)?.text = order?.status
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_commento)?.text = order?.comment
+
+            view?.findViewById<TextView>(R.id.user_ord_inf_id)?.text = "Ordine N." + order?.id
+            view?.findViewById<TextView>(R.id.user_ord_inf_data)?.text = order?.dataOrd
+            view?.findViewById<TextView>(R.id.user_ord_inf_status)?.text = order?.status
+            view?.findViewById<TextView>(R.id.user_ord_inf_commento)?.text = order?.comment
 
             var sum = prods.keys.sumOf { key ->
                 (key.price * prods.get(key)!!).toDouble()
             }
 
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_totprice)?.text = ((sum*100).roundToInt().toDouble()/100).toString() + " €"
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_prodlist)?.text = ProdsList(prods).toString()
+            view?.findViewById<TextView>(R.id.user_ord_inf_totprice)?.text = "Prezzo Totale: "+((sum*100).roundToInt().toDouble()/100).toString() + " €"
+            view?.findViewById<TextView>(R.id.user_ord_inf_prodlist)?.text = ProdsList(prods).toString()
         }
 
     }
