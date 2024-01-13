@@ -106,6 +106,20 @@ class viewModel(application: Application): AndroidViewModel(application) {
         return repository.dbStoreDataDAO?.getStore(email)
     }
 
+    fun getStoreFromId(id:Int){
+        viewModelScope.launch(Dispatchers.IO){
+            val res = getStoreFromIdSus(id)
+            withContext(Dispatchers.Main){
+                store!!.value = res
+            }
+        }
+    }
+
+    private suspend fun getStoreFromIdSus(id: Int): StoreData?{
+        return repository.dbStoreDataDAO?.getStoreFromId(id)
+    }
+
+
     fun insertStore(storeData: StoreData){
         viewModelScope.launch(Dispatchers.IO){
            insertStoreSus(storeData)
