@@ -38,7 +38,6 @@ class OrdersListFragmentVenditore : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
         recyclerView = view.findViewById(R.id.ordersList)
-        Log.d("test","entrato nel robo")
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         adapter = ordAdapter(ordList) { selectedItem ->

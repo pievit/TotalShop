@@ -28,6 +28,7 @@
         app:layout_constraintBottom_toTopOf="@id/storeList"
         android:backgroundTint="@color/white"
         android:src="@drawable/tune_24px"
+
         android:contentDescription="Filter" />
 
     <androidx.recyclerview.widget.RecyclerView

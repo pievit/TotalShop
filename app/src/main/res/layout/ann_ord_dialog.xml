@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/ann_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Annulla questo ordine"
+        android:textSize="25dp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/Red"
+        app:layout_constraintStart_toStartOf="parent"
+        android:elegantTextHeight="true"
+        />
+
+    <EditText
+        android:id="@+id/ann_dialog_comment"
+        android:layout_width="match_parent"
+        android:lines="10"
+        android:layout_marginTop="15dp"
+        android:textAlignment="gravity"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/ann_dialog_title"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hint="Aggiungi un commento per l'annullamento dell'oridne..."
+        />
+
+    <Button
+        android:id="@+id/ann_dialog_indietro_but"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/ann_dialog_comment"
+        android:text="Indietro"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/ann_dialog_ann_but"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="15dp"
+        />
+
+    <Button
+        android:id="@+id/ann_dialog_ann_but"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/ann_dialog_indietro_but"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ann_dialog_comment"
+        android:text="Annulla ordine"
+        app:cornerRadius="8dp"
+        android:backgroundTint="@color/Red"
+        android:layout_marginBottom="15dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

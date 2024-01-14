@@ -1,13 +1,19 @@
 package it.torino.totalshop.utente
 
+import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -22,11 +28,15 @@ import kotlin.math.roundToInt
 class DettagliFragmentUtente : Fragment() {
     var vm: viewModel? = null
     var order : OrdersData? = null
+    private lateinit var annDialog: AlertDialog
+    private lateinit var annDialogView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.utente_ordini_info, container, false)
         view.findViewById<FloatingActionButton>(R.id.user_floatingbtn).setOnClickListener {
@@ -49,6 +59,12 @@ class DettagliFragmentUtente : Fragment() {
             store->
             view.findViewById<TextView>(R.id.user_ord_inf_store)?.text = store.storeName
         }
+
+        val annBuilder = AlertDialog.Builder(requireActivity())
+        val annInfl8r = requireActivity().layoutInflater
+        annDialogView = annInfl8r.inflate(R.layout.ann_ord_dialog,null)
+        annBuilder.setView(annDialogView)
+        annDialog = annBuilder.create()
 
     }
     fun update(){
@@ -81,8 +97,41 @@ class DettagliFragmentUtente : Fragment() {
 
             view?.findViewById<TextView>(R.id.user_ord_inf_totprice)?.text = "Prezzo Totale: "+((sum*100).roundToInt().toDouble()/100).toString() + " €"
             view?.findViewById<TextView>(R.id.user_ord_inf_prodlist)?.text = ProdsList(prods).toString()
+
+            if(order?.status.equals("nuovo")){
+
+                view?.findViewById<Button>(R.id.user_but_ann_ord)?.setOnClickListener{
+                    annDialog.show()
+                    annDialogView.findViewById<Button>(R.id.ann_dialog_indietro_but).setOnClickListener{
+                        annDialog.dismiss()
+                    }
+                    annDialogView.findViewById<Button>(R.id.ann_dialog_ann_but).setOnClickListener{
+                        annullaOrdine()
+                    }
+                }
+
+
+            }else{
+                view?.findViewById<ConstraintLayout>(R.id.utente_order_status_buttons)?.visibility = View.INVISIBLE
+            }
+
+
         }
 
+    }
+
+    fun annullaOrdine(){
+        var comment = annDialogView.findViewById<EditText>(R.id.ann_dialog_comment).text.toString()
+        if(comment.length>10){
+            order?.status = "Annullato"
+            order?.comment = comment
+            vm?.insertOrder(order!!)
+            update()
+            annDialog.dismiss()
+            Toast.makeText(requireActivity(),"Ordine Annullato", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(requireActivity(),"Inserisci un commento di almeno 10 caratteri", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun isOrientationLandscape(): Boolean {
