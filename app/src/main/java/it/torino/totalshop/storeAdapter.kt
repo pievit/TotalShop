@@ -13,7 +13,7 @@ class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> U
     inner class StoresViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val logo : ImageView = itemView.findViewById(R.id.storeLogo)
         val storeName : TextView = itemView.findViewById(R.id.storeName)
-
+        val storeCategory: TextView = itemView.findViewById(R.id.storeCategory)
 
     }
 
@@ -26,6 +26,7 @@ class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> U
         var item = mList[position]
         holder.logo.setImageResource(R.drawable.store_logo_24px)
         holder.storeName.text = mList[position].storeName
+        holder.storeCategory.text = "Categoria: "+mList[position].storeCategory
         holder.itemView.setOnClickListener{
             onItemClick(item)
         }
