@@ -1,5 +1,7 @@
 package it.torino.totalshop.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
+import it.torino.totalshop.utente.UtenteActivity
+import it.torino.totalshop.venditore.VenditoreActivity
 
 class HomeFragment: Fragment() {
 
@@ -42,6 +46,21 @@ class HomeFragment: Fragment() {
             findNavController().navigate(R.id.next_action,arg)
         }
 
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref){
+            if(contains("USER_EMAIL")&& contains("USER_PASSWORD") && contains("USER_TYPE")){
+                var intent: Intent
+                if(getBoolean("USER_TYPE",false)){
+                    intent = Intent(activity, VenditoreActivity::class.java)
+                }else{
+                    intent = Intent(activity, UtenteActivity::class.java)
+                }
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra("email",getString("USER_EMAIL",null))
+                startActivity(intent)
+            }
+        }
     }
 
 }
