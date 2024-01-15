@@ -46,7 +46,7 @@
                 android:layout_marginStart="3dp"
                 android:text="Ferramenta Rossi"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@id/user_comment_title"
+                app:layout_constraintBottom_toTopOf="@id/user_ord_inf_phone"
                 app:layout_constraintEnd_toStartOf="@id/user_ord_inf_status"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_ord_inf_id" />
@@ -64,6 +64,16 @@
                 android:layout_marginEnd="3dp"
                 android:id="@+id/user_ord_inf_status"/>
             <TextView
+                android:id="@+id/user_ord_inf_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/user_ord_inf_store"
+                android:text="3334445566"
+                android:textSize="20dp"
+                android:layout_marginStart="5dp"
+                android:elegantTextHeight="true"
+                />
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/user_comment_title"
@@ -71,7 +81,7 @@
                 android:textStyle="bold"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toTopOf="@id/user_ord_inf_commento"
-                app:layout_constraintTop_toBottomOf="@id/user_ord_inf_store"
+                app:layout_constraintTop_toBottomOf="@id/user_ord_inf_phone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginBottom="3dp"
