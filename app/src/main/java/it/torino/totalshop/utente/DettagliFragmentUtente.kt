@@ -60,6 +60,12 @@ class DettagliFragmentUtente : Fragment() {
             view.findViewById<TextView>(R.id.user_ord_inf_store)?.text = store.storeName
         }
 
+        vm?.user?.observe(viewLifecycleOwner){
+            user ->
+            view.findViewById<TextView>(R.id.user_ord_inf_phone)?.text = user.phone
+        }
+
+
         val annBuilder = AlertDialog.Builder(requireActivity())
         val annInfl8r = requireActivity().layoutInflater
         annDialogView = annInfl8r.inflate(R.layout.ann_ord_dialog,null)
@@ -68,7 +74,7 @@ class DettagliFragmentUtente : Fragment() {
 
     }
     fun update(){
-
+        vm?.getOwner(order!!.storeId)
         vm?.getStoreFromId(order!!.storeId)
         var lp = order?.listaProd
         if(lp?.length!=0) {

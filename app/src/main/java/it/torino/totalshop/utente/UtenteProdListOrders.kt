@@ -79,7 +79,8 @@ class UtenteProdListOrders: Fragment() {
 
         })
         view.findViewById<TextView>(R.id.titleProdStore).setText(requireArguments().getString("storeName"))
-
+        view.findViewById<TextView>(R.id.categoryProdStore).setText("Categoria: "+requireArguments().getString("storeCategory"))
+        view.findViewById<TextView>(R.id.addressProdStore).setText(requireArguments().getString("storeAddress"))
         vm?.getAllProdsFromStore(requireArguments().getInt("storeId"))
         vm?.prodsList?.observe(viewLifecycleOwner){
             pl ->
@@ -88,13 +89,13 @@ class UtenteProdListOrders: Fragment() {
         }
 
 
-        vm?.newProd?.observe(viewLifecycleOwner){
+        vm?.newOrder?.observe(viewLifecycleOwner){
             bool ->
             if(bool){
                 Toast.makeText(requireActivity(),"Ordine creato con successo",Toast.LENGTH_SHORT).show()
                 cartDialog.dismiss()
-                vm?.newProd?.value = false
-                findNavController().navigate(R.id.utente_ordini)
+                findNavController().popBackStack()
+
             }
         }
 
@@ -176,13 +177,6 @@ class UtenteProdListOrders: Fragment() {
         cartRecycler.layoutParams.width = 1250
         cartRecycler.adapter = cartProdAdapter
         cartDialog.show()
-//        with(cartRecycler){
-//            setHasFixedSize(true)
-//            layoutManager = LinearLayoutManager(requireActivity())
-//            adapter = cartProdAdapter
-//        }
-
-
 
         cartView.findViewById<Button>(R.id.butCartIndietro).setOnClickListener{
             cartDialog.dismiss()

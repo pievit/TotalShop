@@ -14,7 +14,7 @@ class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> U
         val logo : ImageView = itemView.findViewById(R.id.storeLogo)
         val storeName : TextView = itemView.findViewById(R.id.storeName)
         val storeCategory: TextView = itemView.findViewById(R.id.storeCategory)
-
+        val storeAddress: TextView = itemView.findViewById(R.id.storeAddress)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoresViewHolder {
@@ -27,6 +27,7 @@ class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> U
         holder.logo.setImageResource(R.drawable.store_logo_24px)
         holder.storeName.text = mList[position].storeName
         holder.storeCategory.text = "Categoria: "+mList[position].storeCategory
+        holder.storeAddress.text = mList[position].storeAddress
         holder.itemView.setOnClickListener{
             onItemClick(item)
         }

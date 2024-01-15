@@ -59,6 +59,10 @@ class DettagliFragmentVenditore : Fragment() {
             update()
         }
 
+        vm?.user?.observe(viewLifecycleOwner){
+                user ->
+            view.findViewById<TextView>(R.id.vendor_ord_inf_phone)?.text = user.phone
+        }
 
         val annBuilder = AlertDialog.Builder(requireActivity())
         val annInfl8r = requireActivity().layoutInflater
@@ -76,6 +80,7 @@ class DettagliFragmentVenditore : Fragment() {
 
     }
     fun update(){
+        vm?.getUser(order!!.usermail,false)
         var lp = order?.listaProd
         if(lp?.length!=0) {
             lp = StringEscapeUtils.unescapeJava(lp)

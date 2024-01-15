@@ -37,7 +37,6 @@ class HomeFragmentUtente: Fragment() {
     private var prodList = ArrayList<ProductsData>()
     private lateinit var adapter: storeAdapter
     var myCoord: LocationData = LocationData(0.0,0.0)
-    var listProdOrdersFlag = UtenteProdListOrders()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
         locationVM = ViewModelProvider(requireActivity())[LocationViewModel::class.java]
@@ -57,6 +56,8 @@ class HomeFragmentUtente: Fragment() {
 //            Log.d("Item clicked: ",selectedItem.toString())
             arguments?.putInt("storeId",selectedItem.id)
             arguments?.putString("storeName",selectedItem.storeName)
+            arguments?.putString("storeCategory",selectedItem.storeCategory)
+            arguments?.putString("storeAddress",selectedItem.storeAddress)
             findNavController().navigate(R.id.utente_prod_sel,arguments)
 
         }
@@ -110,6 +111,8 @@ class HomeFragmentUtente: Fragment() {
             myCoord = coord
             updateStoresList()
         }
+
+
     }
 
     private fun updateStoresList(){

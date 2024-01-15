@@ -23,6 +23,8 @@ interface StoreDataDAO {
     @Query("SELECT * FROM StoreData WHERE StoreData.id=:id")
     fun getStoreFromId(id: Int): StoreData?
 
+    @Query("SELECT * FROM StoreData LEFT JOIN UsersData ON UsersData.email=StoreData.owner=:id")
+    fun getOwner(id: Int): UsersData?
     @Delete
     fun delete(storeData: StoreData)
 
