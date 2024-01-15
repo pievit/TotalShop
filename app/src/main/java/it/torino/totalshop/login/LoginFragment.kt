@@ -59,6 +59,7 @@ class LoginFragment: Fragment() {
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent.putExtra("email",vm!!.user!!.value!!.email)
+                    intent.putExtra("userType", vm!!.user!!.value!!.userType)
                     startActivity(intent)
 
                 }else{

@@ -206,4 +206,11 @@ class viewModel(application: Application): AndroidViewModel(application) {
     private suspend fun insertOrderSus(ord: OrdersData){
         repository.dbOrdersDataDAO?.insert(ord)
     }
+
+    fun clearBeforeLogout(){
+        user = null
+        store = null
+        inserito = null
+
+    }
 }
