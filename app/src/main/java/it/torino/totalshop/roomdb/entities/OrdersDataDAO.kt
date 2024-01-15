@@ -14,10 +14,10 @@ interface OrdersDataDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg ordersData: OrdersData)
 
-    @Query("SELECT * FROM OrdersData WHERE usermail=:email")
+    @Query("SELECT * FROM OrdersData WHERE usermail=:email ORDER BY id DESC")
     fun getOrdersFromMail(email: String): MutableList<OrdersData>?
 
-    @Query("SELECT * FROM OrdersData WHERE storeId=:id")
+    @Query("SELECT * FROM OrdersData WHERE storeId=:id ORDER BY id DESC")
     fun getOrdersFromStoreID(id: Int): MutableList<OrdersData>?
 
     @Delete

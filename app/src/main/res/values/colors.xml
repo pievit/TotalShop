@@ -7,4 +7,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="Gray">#87939C</color>
     <color name="LightGray">#A2A5A8</color>
+    <color name="Red">#FFB30606</color>
+    <color name="Green">#FF0E8C1B</color>
 </resources>

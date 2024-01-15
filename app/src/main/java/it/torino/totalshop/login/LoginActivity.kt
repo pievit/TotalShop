@@ -1,5 +1,6 @@
 package it.torino.totalshop.login
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.login_nav_host_fragment) as NavHostFragment? ?: return
 
@@ -43,6 +45,8 @@ class LoginActivity : AppCompatActivity() {
             }
             Log.d("MyActivity", "Destination changed to ${destination.id}")
         }
+
+
 
         this.vm = ViewModelProvider(this)[viewModel::class.java]
 

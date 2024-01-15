@@ -7,12 +7,17 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -29,6 +34,7 @@ class UtenteActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.utente_nav_host_fragment) as NavHostFragment? ?: return
@@ -36,11 +42,16 @@ class UtenteActivity : AppCompatActivity() {
         val navController = host.navController
         setupBottomNavMenu(navController)
 
+        val backbutUser = findViewById<AppCompatImageButton>(R.id.backButtonUser)
+        backbutUser.setOnClickListener{
+            navController.popBackStack()
+        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d("ActivityUtente", "Destination changed to ${destination.id}")
-//            if(host.navController.currentDestination?.displayName=="utente_prod_sel"){
-//                host.navController.popBackStack()
-//            }
+            when (destination.id) {
+                R.id.utente_prod_sel -> backbutUser.visibility = VISIBLE;
+                else -> backbutUser.visibility = GONE;
+            }
         }
 
 

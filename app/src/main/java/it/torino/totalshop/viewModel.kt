@@ -28,7 +28,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
     var user: MutableLiveData<UsersData>? = MutableLiveData<UsersData>()
     var store: MutableLiveData<StoreData>? = MutableLiveData<StoreData>()
     private var prvuser: UsersData? = null
-    var newProd: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
+    var newOrder: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     var inserito: MutableLiveData<Boolean>? = MutableLiveData<Boolean>()
     fun getUsers(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -105,6 +105,20 @@ class viewModel(application: Application): AndroidViewModel(application) {
     private suspend fun getStoreSus(email: String): StoreData?{
         return repository.dbStoreDataDAO?.getStore(email)
     }
+
+    fun getStoreFromId(id:Int){
+        viewModelScope.launch(Dispatchers.IO){
+            val res = getStoreFromIdSus(id)
+            withContext(Dispatchers.Main){
+                store!!.value = res
+            }
+        }
+    }
+
+    private suspend fun getStoreFromIdSus(id: Int): StoreData?{
+        return repository.dbStoreDataDAO?.getStoreFromId(id)
+    }
+
 
     fun insertStore(storeData: StoreData){
         viewModelScope.launch(Dispatchers.IO){
@@ -198,7 +212,7 @@ class viewModel(application: Application): AndroidViewModel(application) {
             insertOrderSus(ord)
             getAllOrdersFromEmail(ord.usermail)
             withContext(Dispatchers.Main){
-                newProd!!.value = true
+                newOrder!!.value = true
             }
         }
     }
@@ -211,6 +225,18 @@ class viewModel(application: Application): AndroidViewModel(application) {
         user = null
         store = null
         inserito = null
+    }
 
+    fun getOwner(id: Int){
+        viewModelScope.launch(Dispatchers.IO){
+            var res = getOwnerSus(id)
+            withContext(Dispatchers.Main){
+                user!!.value = res
+            }
+        }
+    }
+
+    private suspend fun getOwnerSus(id:Int): UsersData?{
+        return repository.dbStoreDataDAO?.getOwner(id)
     }
 }

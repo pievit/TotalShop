@@ -32,7 +32,8 @@ class HomeFragmentVenditore : Fragment() {
     private lateinit var adapter: ProdsAdapter
     private lateinit var butNewProd: Button
     private lateinit var myStore: StoreData
-    private lateinit var alertDialog: AlertDialog
+    private lateinit var newProdDialog: AlertDialog
+    private lateinit var newProdView: View
     private lateinit var delProd: ProductsData
     private lateinit var delDialog: AlertDialog
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -52,7 +53,13 @@ class HomeFragmentVenditore : Fragment() {
         butNewProd = view.findViewById(R.id.butAddprod)
 
         butNewProd.setOnClickListener{
-            alertDialog.show()
+            newProdDialog.show()
+            newProdView.findViewById<Button>(R.id.newprodbutindietro).setOnClickListener{
+                newProdDialog.dismiss()
+            }
+            newProdView.findViewById<Button>(R.id.newprodbutagg).setOnClickListener{
+                addProd()
+            }
         }
 
         adapter = ProdsAdapter(prodList,this)
@@ -86,39 +93,9 @@ class HomeFragmentVenditore : Fragment() {
 
         val builder = AlertDialog.Builder(requireActivity())
         val infl8r = requireActivity().layoutInflater
-        var inview = infl8r.inflate(R.layout.dialog_add_prods,null)
-        builder.setView(inview)
-        builder.setPositiveButton("Aggiungi Prodotto",DialogInterface.OnClickListener{ dialog, id ->
-            val nomeP = inview.findViewById<EditText>(R.id.newprodname).text.toString()
-            val descP = inview.findViewById<EditText>(R.id.newproddesc).text.toString()
-            val priceP = inview.findViewById<EditText>(R.id.newprodprice).text.toString().toFloat()
-            val pd = ProductsData(nomeP,descP,priceP,myStore.id)
-            var flag = false
-            for(prod in prodList){
-                if(prod.name.equals(nomeP,true)){
-                    flag = true
-                    break
-                }
-            }
-            if(!flag){
-                vm?.insertProd(pd)
-                Toast.makeText(requireActivity(),"Prodotto aggiunto con successo.",Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            }else{
-                Toast.makeText(requireActivity(),"Prodotto già presente.",Toast.LENGTH_SHORT).show()
-            }
-
-            inview.findViewById<EditText>(R.id.newprodname).setText("")
-            inview.findViewById<EditText>(R.id.newproddesc).setText("")
-            inview.findViewById<EditText>(R.id.newprodprice).setText("")
-
-        })
-
-            .setNegativeButton("Indietro",DialogInterface.OnClickListener{
-                    dialog,id -> alertDialog.dismiss()
-            })
-
-        alertDialog = builder.create()
+        newProdView = infl8r.inflate(R.layout.dialog_add_prods,null)
+        builder.setView(newProdView)
+        newProdDialog = builder.create()
 
 
         val deleteBuilder = AlertDialog.Builder(requireActivity())
@@ -133,6 +110,32 @@ class HomeFragmentVenditore : Fragment() {
                 dialog,id -> delDialog.dismiss()
             }
         delDialog = deleteBuilder.create()
+    }
+
+    fun addProd(){
+        val nomeP = newProdView.findViewById<EditText>(R.id.newprodname).text.toString()
+        val descP = newProdView.findViewById<EditText>(R.id.newproddesc).text.toString()
+        val priceP = newProdView.findViewById<EditText>(R.id.newprodprice).text.toString().toFloat()
+        val pd = ProductsData(nomeP,descP,priceP,myStore.id)
+        var flag = false
+        for(prod in prodList){
+            if(prod.name.equals(nomeP,true)){
+                flag = true
+                break
+            }
+        }
+        if(!flag){
+            vm?.insertProd(pd)
+            Toast.makeText(requireActivity(),"Prodotto aggiunto con successo.",Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(requireActivity(),"Prodotto già presente.",Toast.LENGTH_SHORT).show()
+        }
+
+        newProdView.findViewById<EditText>(R.id.newprodname).setText("")
+        newProdView.findViewById<EditText>(R.id.newproddesc).setText("")
+        newProdView.findViewById<EditText>(R.id.newprodprice).setText("")
+        newProdDialog.dismiss()
+
     }
 
     fun deleteProd(prod: ProductsData){

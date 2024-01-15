@@ -5,9 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-//import android.widget.SearchView
-import androidx.appcompat.widget.SearchView
+import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.LocationViewModel
 import it.torino.totalshop.R
+import it.torino.totalshop.roomdb.entities.LocationData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.storeAdapter
@@ -23,6 +25,7 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
+
 
 class HomeFragmentUtente: Fragment() {
     var vm: viewModel? = null
@@ -33,7 +36,7 @@ class HomeFragmentUtente: Fragment() {
     private var mList = ArrayList<StoreData>()
     private var prodList = ArrayList<ProductsData>()
     private lateinit var adapter: storeAdapter
-    var listProdOrdersFlag = UtenteProdListOrders()
+    var myCoord: LocationData = LocationData(0.0,0.0)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
         locationVM = ViewModelProvider(requireActivity())[LocationViewModel::class.java]
@@ -53,6 +56,8 @@ class HomeFragmentUtente: Fragment() {
 //            Log.d("Item clicked: ",selectedItem.toString())
             arguments?.putInt("storeId",selectedItem.id)
             arguments?.putString("storeName",selectedItem.storeName)
+            arguments?.putString("storeCategory",selectedItem.storeCategory)
+            arguments?.putString("storeAddress",selectedItem.storeAddress)
             findNavController().navigate(R.id.utente_prod_sel,arguments)
 
         }
@@ -68,6 +73,20 @@ class HomeFragmentUtente: Fragment() {
             }
 
         })
+
+
+        var filterSearch = view.findViewById<AppCompatImageButton>(R.id.filterSearch)
+        val radiusMenu = PopupMenu(requireActivity(), filterSearch)
+        radiusMenu.getMenuInflater().inflate(R.menu.menu_radius, radiusMenu.getMenu())
+        radiusMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { menuItem -> // Toast message on menu item clicked
+            radius = menuItem.title.toString().toInt()
+            Toast.makeText(requireActivity(),"Raggio di ricerca stores impostato su $radius metri.",Toast.LENGTH_SHORT).show()
+            true
+        })
+
+        filterSearch.setOnClickListener{
+            radiusMenu.show()
+        }
 
         vm?.getStores()
         vm?.getAllProds()
@@ -89,36 +108,41 @@ class HomeFragmentUtente: Fragment() {
 
         locationVM!!.locationData.observe(viewLifecycleOwner){
             coord ->
-                var nearStoreList: ArrayList<StoreData> = ArrayList()
+            myCoord = coord
+            updateStoresList()
+        }
 
-                for(r: StoreData in vm!!.storesList.value!!){
-                    if(r.lat != null && r.lon != null){
-                        val R = 6371e3; // metres
-                        val var1 = coord.latitude * Math.PI/180; // φ, λ in radians
-                        val var2 = (r.lat!! * Math.PI)/180;
-                        val delt1 = (r.lat!!-coord.latitude) * Math.PI/180;
-                        val delt2 = (r.lon!!-coord.longitude) * Math.PI/180;
 
-                        val a = sin(delt1/2) * sin(delt1/2) +
-                                cos(var1) * cos(var2) *
-                                sin(delt2/2) * sin(delt2/2);
-                        val c = 2 * atan2(sqrt(a), sqrt(1-a));
+    }
 
-                        val d = R * c; //distanza in metri
+    private fun updateStoresList(){
+        var nearStoreList: ArrayList<StoreData> = ArrayList()
 
-                        if(d<= radius){
-                            nearStoreList.add(r)
-                        }
-                    }
+        for(r: StoreData in vm!!.storesList.value!!){
+            if(r.lat != null && r.lon != null){
+                val R = 6371e3; // metres
+                val var1 = myCoord.latitude * Math.PI/180; // φ, λ in radians
+                val var2 = (r.lat!! * Math.PI)/180;
+                val delt1 = (r.lat!!-myCoord.latitude) * Math.PI/180;
+                val delt2 = (r.lon!!-myCoord.longitude) * Math.PI/180;
 
+                val a = sin(delt1/2) * sin(delt1/2) +
+                        cos(var1) * cos(var2) *
+                        sin(delt2/2) * sin(delt2/2);
+                val c = 2 * atan2(sqrt(a), sqrt(1-a));
+
+                val d = R * c; //distanza in metri
+
+                if(d<= radius){
+                    nearStoreList.add(r)
                 }
-
-                mList = nearStoreList
-                Log.d("Test",mList.toString())
-                adapter.setFilteredList(mList)
-
+            }
 
         }
+
+        mList = nearStoreList
+        Log.d("Test",mList.toString())
+        adapter.setFilteredList(mList)
     }
 
     private fun updateList(newText: String?){

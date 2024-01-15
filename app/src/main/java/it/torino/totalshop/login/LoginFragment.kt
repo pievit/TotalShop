@@ -1,5 +1,6 @@
 package it.torino.totalshop.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -48,6 +49,14 @@ class LoginFragment: Fragment() {
                 var pass = view?.findViewById<TextView>(R.id.password)?.text
 
                 if(res.password.equals(pass.toString())){
+
+                    val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                    with (sharedPref.edit()) {
+                        putString("USER_EMAIL", res.email)
+                        putString("USER_PASSWORD",res.password)
+                        putBoolean("USER_TYPE",res.userType)
+                        apply()
+                    }
                     //login
                     Toast.makeText(context,"Utente Loggato con successo.",Toast.LENGTH_SHORT).show()
                     var intent: Intent
@@ -58,8 +67,9 @@ class LoginFragment: Fragment() {
                     }
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    intent.putExtra("email",vm!!.user!!.value!!.email)
-                    intent.putExtra("userType", vm!!.user!!.value!!.userType)
+                    intent.putExtra("userType", res.userType)
+                    intent.putExtra("email",res.email)
+
                     startActivity(intent)
 
                 }else{
