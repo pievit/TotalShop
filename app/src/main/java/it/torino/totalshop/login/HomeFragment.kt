@@ -46,21 +46,21 @@ class HomeFragment: Fragment() {
             findNavController().navigate(R.id.next_action,arg)
         }
 
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref){
-            if(contains("USER_EMAIL")&& contains("USER_PASSWORD") && contains("USER_TYPE")){
-                var intent: Intent
-                if(getBoolean("USER_TYPE",false)){
-                    intent = Intent(activity, VenditoreActivity::class.java)
-                }else{
-                    intent = Intent(activity, UtenteActivity::class.java)
-                }
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.putExtra("email",getString("USER_EMAIL",null))
-                startActivity(intent)
-            }
-        }
+//        val sharedPref = requireActivity().getSharedPreferences("USER",Context.MODE_PRIVATE)
+//        with(sharedPref){
+//            if(contains("USER_EMAIL")&& contains("USER_PASSWORD") && contains("USER_TYPE")){
+//                var intent: Intent
+//                if(getBoolean("USER_TYPE",false)){
+//                    intent = Intent(activity, VenditoreActivity::class.java)
+//                }else{
+//                    intent = Intent(activity, UtenteActivity::class.java)
+//                }
+//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//                intent.putExtra("email",getString("USER_EMAIL",null))
+//                startActivity(intent)
+//            }
+//        }
     }
 
 }

@@ -50,7 +50,7 @@ class LoginFragment: Fragment() {
 
                 if(res.password.equals(pass.toString())){
 
-                    val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+                    val sharedPref = requireActivity().getSharedPreferences("USER",Context.MODE_PRIVATE)
                     with (sharedPref.edit()) {
                         putString("USER_EMAIL", res.email)
                         putString("USER_PASSWORD",res.password)

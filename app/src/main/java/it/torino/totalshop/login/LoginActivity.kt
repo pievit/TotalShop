@@ -1,6 +1,9 @@
 package it.torino.totalshop.login
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +11,18 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
 import it.torino.totalshop.viewModel
 
 
 class LoginActivity : AppCompatActivity() {
     var vm: viewModel? = null
+    lateinit var notificationService: NotificationService
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+
 
 
         val host: NavHostFragment = supportFragmentManager
@@ -61,6 +68,56 @@ class LoginActivity : AppCompatActivity() {
 
         this.vm?.getUsers()
         this.vm?.getStores()
+
+//        val intentNotif = Intent(this,NotificationService::class.java)
+////        startService(intentNotif)
+//        stopService(intentNotif)
+        notificationService = NotificationService(application)
+        notificationService.onDestroy()
+        notificationService.onCreate()
+
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestNotificationPermission()
+            return
+        }else{
+            Log.d("Debug","Start Notification service")
+            notificationService.startNotificationService()
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            notificationService.NOTIFICATION_PERMISSION_ID -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+
+                    notificationService.startNotificationService()
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return
+            }
+        }
+    }
+
+    fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ),
+                notificationService.NOTIFICATION_PERMISSION_ID
+            )
+        }
     }
 
 

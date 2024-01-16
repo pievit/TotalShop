@@ -20,6 +20,10 @@ interface OrdersDataDAO {
     @Query("SELECT * FROM OrdersData WHERE storeId=:id ORDER BY id DESC")
     fun getOrdersFromStoreID(id: Int): MutableList<OrdersData>?
 
+    @Query("SELECT * FROM OrdersData")
+    fun getAllOrders(): MutableList<OrdersData>?
+
+
     @Delete
     fun delete(ordersData: OrdersData)
 
