@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ordersList"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_constraintTop_toTopOf="parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/venditore_no_ord"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/venditoreOrdersList"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Ancora nessun Ordine"
+        android:gravity="center"
+        android:textSize="25dp"
+        app:layout_constraintVertical_weight="8"
+        android:elegantTextHeight="true"
+        android:visibility="gone"
+
+        />
+
+<androidx.recyclerview.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/venditoreOrdersList"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintVertical_weight="1"
+    app:layout_constraintTop_toBottomOf="@id/venditore_no_ord"
     app:layout_constraintBottom_toBottomOf="parent"
     tools:context="it.torino.totalshop.venditore.OrdiniFragmentVenditore" />
+</androidx.constraintlayout.widget.ConstraintLayout>

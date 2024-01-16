@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="it.torino.totalshop.venditore.OrdiniFragmentVenditore">
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/ordiniListFragment"
+        android:id="@+id/venditoreOrdiniListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -30,7 +30,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/ordiniInfoFragment"
+        android:id="@+id/venditoreOrdiniInfoFragment"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"

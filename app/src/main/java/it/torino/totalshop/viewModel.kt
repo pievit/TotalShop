@@ -74,6 +74,14 @@ class viewModel(application: Application): AndroidViewModel(application) {
             }
         }
     }
+
+    fun modifyUser(usersData: UsersData){
+        viewModelScope.launch(Dispatchers.IO) {
+            insertUserSus(usersData)
+            getUser(usersData.email,usersData.userType)
+        }
+    }
+
     private suspend fun insertUserSus(usersData: UsersData){
         repository.dbUsersDataDao?.insert(usersData)
     }

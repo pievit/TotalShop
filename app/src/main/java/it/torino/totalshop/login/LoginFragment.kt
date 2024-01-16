@@ -58,13 +58,18 @@ class LoginFragment: Fragment() {
                         apply()
                     }
                     //login
-                    Toast.makeText(context,"Utente Loggato con successo.",Toast.LENGTH_SHORT).show()
+
                     var intent: Intent
+                    var msg = ""
                     if(arguments?.getInt("UserType")==0){
                         intent = Intent(activity, UtenteActivity::class.java)
+                        msg = "Utente Loggato con successo."
                     }else{
                         intent = Intent(activity,VenditoreActivity::class.java)
+                        msg = "Venditore Loggato con successo."
+
                     }
+                    Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     intent.putExtra("userType", res.userType)

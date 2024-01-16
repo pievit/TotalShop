@@ -22,10 +22,6 @@ import it.torino.totalshop.viewModel
 
 class OrdiniFragment : Fragment() {
     var vm: viewModel? = null
-    private lateinit var recyclerView: RecyclerView
-    private var ordList = ArrayList<OrdersData>()
-    private lateinit var adapter: ordAdapter
-    private lateinit var myStore : StoreData
     private var frag1 = OrdersListFragmentUtente()
     private var frag2 = DettagliFragmentUtente()
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
@@ -36,7 +32,7 @@ class OrdiniFragment : Fragment() {
         if(isOrientationLandscape()){
             var fm = childFragmentManager.beginTransaction()
             Log.d("Test","landscape")
-            fm.add(R.id.utenteOrdiniListFragment,frag1)
+            fm.replace(R.id.utenteOrdiniListFragment,frag1)
 //            fm.commit()
 //            fm = childFragmentManager.beginTransaction()
             fm.commit()

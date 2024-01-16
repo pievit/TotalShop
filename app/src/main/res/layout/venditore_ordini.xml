@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="it.torino.totalshop.venditore.VenditoreActivity">
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/ordiniListFragment"
+        android:id="@+id/venditoreOrdiniListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"

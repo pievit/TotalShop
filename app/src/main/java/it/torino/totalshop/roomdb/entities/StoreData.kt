@@ -12,7 +12,6 @@ import androidx.room.PrimaryKey
         UsersData::class,
         arrayOf("email"),
         arrayOf("owner"),
-        ForeignKey.CASCADE
     )]
 )
 class StoreData(

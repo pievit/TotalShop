@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -43,23 +44,21 @@ class VenditoreActivity : AppCompatActivity() {
             when(destination.id){
                 R.id.venditore_home -> {
                     backbtn.visibility = View.GONE
-                    findViewById<Toolbar>(R.id.toolbarTitle).setTitle("Home Negozio")
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Home Negozio")
                 }
                 R.id.venditore_ordini -> {
                     backbtn.visibility = View.GONE
-                    findViewById<Toolbar>(R.id.toolbarTitle).setTitle("Ordini Store")
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Ordini Store")
                 }
                 R.id.venditore_settings -> {
                     backbtn.visibility = View.GONE
-                    findViewById<Toolbar>(R.id.toolbarTitle).setTitle("Settings")
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Settings")
                 }
             }
             Log.d("ActivityVenditore", "Destination changed to ${destination.id}")
         }
 
-        backbtn.setOnClickListener{
-            navController.popBackStack()
-        }
+
 
         locationVM = ViewModelProvider(this)[LocationViewModel::class.java]
 
@@ -99,15 +98,7 @@ class VenditoreActivity : AppCompatActivity() {
                 requestLocationPermission()
             }
 
-        }else{
-            Log.d("Test","start ls" )
-            locationVM?.startLocationService()
         }
-
-//        val notif = intent.getIntExtra("notifOrder",-1)
-//        if(notif>=0){
-//            navController.navigate(R.id.venditore_ordini)
-//        }
     }
 
 
@@ -125,6 +116,7 @@ class VenditoreActivity : AppCompatActivity() {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     locationVM!!.startLocationService()
+                    locationVM!!.stopLocationUpdates()
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

@@ -35,7 +35,7 @@ class DettagliFragmentVenditore : Fragment() {
     private lateinit var annDialogView: View
     private lateinit var confDialog: AlertDialog
     private lateinit var confDialogView: View
-    var flagAlert = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

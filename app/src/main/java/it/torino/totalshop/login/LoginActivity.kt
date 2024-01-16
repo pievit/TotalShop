@@ -68,13 +68,13 @@ class LoginActivity : AppCompatActivity() {
 
         this.vm?.getUsers()
         this.vm?.getStores()
+//notificationService = NotificationService(application)
+////        notificationService.onDestroy()
 
-//        val intentNotif = Intent(this,NotificationService::class.java)
-////        startService(intentNotif)
 //        stopService(intentNotif)
-        notificationService = NotificationService(application)
-        notificationService.onDestroy()
-        notificationService.onCreate()
+//        notificationService = NotificationService()
+//        notificationService.onDestroy()
+//        notificationService.onCreate()
 
 
         if (ActivityCompat.checkSelfPermission(
@@ -86,7 +86,11 @@ class LoginActivity : AppCompatActivity() {
             return
         }else{
             Log.d("Debug","Start Notification service")
-            notificationService.startNotificationService()
+            var sp = getSharedPreferences("NOTIFY",Context.MODE_PRIVATE)
+            if(sp.getBoolean("NOTIFICATIONS",false)){
+                val intentNotif = Intent(this,NotificationService::class.java)
+                startService(intentNotif)
+            }
         }
     }
 
@@ -97,8 +101,9 @@ class LoginActivity : AppCompatActivity() {
             notificationService.NOTIFICATION_PERMISSION_ID -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
-
-                    notificationService.startNotificationService()
+                    getSharedPreferences("NOTIFY",Context.MODE_PRIVATE).edit().putBoolean("NOTIFICATIONS",true).apply()
+                    val intentNotif = Intent(this,NotificationService::class.java)
+                    startService(intentNotif)
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.

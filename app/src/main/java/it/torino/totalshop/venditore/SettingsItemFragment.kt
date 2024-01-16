@@ -1,6 +1,9 @@
 package it.torino.totalshop.venditore
 
 import android.Manifest
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +15,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -19,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.switchmaterial.SwitchMaterial
 import it.torino.totalshop.LocationViewModel
+import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
@@ -27,8 +32,8 @@ import it.torino.totalshop.viewModel
 class SettingsItemFragment : Fragment() {
 
     private var vm : viewModel? = null
-    private val settname : String = requireArguments().getString("settname")!!
-    private val userType : Boolean = requireActivity().intent.getBooleanExtra("userType",false)
+    var settname : String = ""
+    private var userType: Boolean = false
     private lateinit var user : UsersData
     private var store : StoreData? = null
     var updateuser : Boolean = false
@@ -36,11 +41,15 @@ class SettingsItemFragment : Fragment() {
     var updatelocation : Boolean = false
     var locationVM: LocationViewModel? = null
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+//        settname = requireArguments().getString("settname")!!
+        userType = requireActivity().intent.getBooleanExtra("userType",false)
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
         locationVM = ViewModelProvider(requireActivity())[LocationViewModel::class.java]
         val layout : Int = when(settname){
@@ -58,76 +67,43 @@ class SettingsItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var toolbartitle = requireActivity().findViewById<TextView>(R.id.toolbarTitle)
-        toolbartitle.text = settname
-        var backbtn = requireActivity().findViewById<Button>(R.id.backButtonVendor)
-        backbtn.visibility = View.VISIBLE
-        vm?.getUser(requireActivity().intent.getStringExtra("email")!!,userType)
-        vm?.user?.observe(viewLifecycleOwner){
-            uservm ->
-            user = uservm
-            if(user.userType){
-                vm?.getStore(user.email)
-            }
-            if(updateuser){
-                updateuser = false
-                Toast.makeText(context,"Modifiche Account apportate con successo",Toast.LENGTH_SHORT).show()
-            }
+        lateinit var name : EditText
+        lateinit var email : TextView
+        lateinit var numero : EditText
+        lateinit var storename : EditText
+        lateinit var categoria : EditText
+        lateinit var indirizzo : EditText
+        lateinit var alert : TextView
+        lateinit var btnpos : Button
+        if(settname == "")
+        {
+            var frag1 = SettingsListFragment()
+            var fragMan = parentFragmentManager.beginTransaction()
+            fragMan.replace(R.id.user_settings_fragmentview,frag1)
+            fragMan.commit()
         }
-        vm?.store?.observe(viewLifecycleOwner){
-                storevm ->
-            store = storevm
-            if(updatestore){
-                updatestore = false
-                Toast.makeText(context,"Modifiche dello Store apportate con successo",Toast.LENGTH_SHORT).show()
-            }
-            if(updatelocation){
-                updatelocation = false
-                Toast.makeText(context,"Posizione store aggiornata con successo",Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        locationVM?.locationData?.observe(viewLifecycleOwner){
-            locationdata ->
-            if(!(locationdata.latitude == 0.0 && locationdata.longitude == 0.0)){
-                store?.lat = locationdata.latitude
-                store?.lon = locationdata.longitude
-                locationVM?.stopLocationUpdates()
-                vm?.insertStore(store!!)
-                updatelocation = true
-                view.findViewById<TextView>(R.id.user_settings_item_store_locNotFound).visibility = View.GONE
-                view.findViewById<Button>(R.id.user_settings_item_store_btnpos).text = "Aggiorna Posizione Store"
-            }
-        }
-
         when(settname){
             "Account" -> {
                 var btn = view.findViewById<Button>(R.id.user_settings_item_account_btnsave)
-                var name = view.findViewById<EditText>(R.id.user_settings_item_account_name)
-                    name.setText(user.name)
+                name = view.findViewById(R.id.user_settings_item_account_name)
+                email = view.findViewById(R.id.user_settings_item_account_email)
+                numero = view.findViewById(R.id.user_settings_item_account_phone)
+
                 name.addTextChangedListener {
-                    text ->
-                        btn.setEnabled(true)
+                        text ->
+                    btn.setEnabled(true)
                 }
-                var email = view.findViewById<EditText>(R.id.user_settings_item_account_email)
-                    email.setText(user.email)
-                email.addTextChangedListener {
-                    text ->
-                        btn.setEnabled(true)
-                }
-                var numero = view.findViewById<EditText>(R.id.user_settings_item_account_phone)
-                    numero.setText(user.phone)
+
                 numero.addTextChangedListener {
-                    text ->
-                        btn.setEnabled(true)
+                        text ->
+                    btn.setEnabled(true)
                 }
                 btn.setOnClickListener(){
                     user.name = name.text.toString()
-                    user.email = email.text.toString()
                     user.phone = numero.text.toString()
                     updateuser = true
                     btn.setEnabled(false)
-                    vm?.insertUser(user)
+                    vm?.modifyUser(user)
                 }
             }
             "Modifica Password" -> {
@@ -148,7 +124,7 @@ class SettingsItemFragment : Fragment() {
                         user.password = newpsw1.text.toString()
                         updateuser = true
                         btn.setEnabled(false)
-                        vm?.insertUser(user)
+                        vm?.modifyUser(user)
                     } else {
                         Toast.makeText(context,"La nuova password non rispetta i prerequisiti",Toast.LENGTH_SHORT).show()
                     }
@@ -156,26 +132,25 @@ class SettingsItemFragment : Fragment() {
             }
             "Gestisci Store" -> {
                 var btn = view.findViewById<Button>(R.id.user_settings_item_store_btnsave)
-                var name = view.findViewById<EditText>(R.id.user_settings_item_store_name)
-                name.setText(store?.storeName)
-                name.addTextChangedListener {
+
+                storename = view.findViewById(R.id.user_settings_item_store_name)
+                categoria = view.findViewById(R.id.user_settings_item_store_categoria)
+                indirizzo = view.findViewById(R.id.user_settings_item_store_indirizzo)
+
+                storename.addTextChangedListener {
                         text ->
                     btn.setEnabled(true)
                 }
-                var categoria = view.findViewById<EditText>(R.id.user_settings_item_store_categoria)
-                categoria.setText(store?.storeCategory)
                 categoria.addTextChangedListener {
                         text ->
                     btn.setEnabled(true)
                 }
-                var indirizzo = view.findViewById<EditText>(R.id.user_settings_item_store_indirizzo)
-                indirizzo.setText(store?.storeAddress)
                 indirizzo.addTextChangedListener {
                         text ->
                     btn.setEnabled(true)
                 }
                 btn.setOnClickListener(){
-                    store?.storeName = name.text.toString()
+                    store?.storeName = storename.text.toString()
                     store?.storeCategory = categoria.text.toString()
                     store?.storeAddress = indirizzo.text.toString()
                     updatestore = true
@@ -183,84 +158,115 @@ class SettingsItemFragment : Fragment() {
                     vm?.insertStore(store!!)
                 }
 
-                var btnpos = view.findViewById<Button>(R.id.user_settings_item_store_btnpos)
+                btnpos = view.findViewById(R.id.user_settings_item_store_btnpos)
                 btnpos.setOnClickListener(){
-                    location()
+                    locationVM?.startLocationService()
                 }
-                var alert = view.findViewById<TextView>(R.id.user_settings_item_store_locNotFound)
-                if (store?.lat == null && store?.lon == null){
-                    alert.visibility = View.VISIBLE
-                } else {
-                    btnpos.text = "Aggiorna Posizione Store"
-                }
+                alert = view.findViewById(R.id.user_settings_item_store_locNotFound)
+
             }
             "Gestisci Notifiche" -> {
                 var notswitch = view.findViewById<SwitchMaterial>(R.id.user_settings_item_notification_notswitch)
                 var check = false //TODO fare controllo se notifiche attivate
-                notswitch.isChecked = check
+
+//                var notificationService = NotificationService(requireActivity().application)
+//                var activityManager = requireActivity().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+//                var runningService = activityManager.getRunningServices(Int.MAX_VALUE)
+//                var serviceInfo = runningService.get
+                var sp = requireActivity().getSharedPreferences("NOTIFY", Context.MODE_PRIVATE)
+
+                notswitch.isChecked = sp.getBoolean("NOTIFICATIONS",false)
 
                 notswitch.setOnCheckedChangeListener(){
-                    _, isChecked ->
+                        _, isChecked ->
                     if(isChecked){
-                        //TODO attiva le notifiche in caso non lo siano
+                        sp.edit().putBoolean("NOTIFICATIONS",isChecked)
+//                        notificationService.startNotificationService()
+
+                        val intent = Intent(requireActivity().applicationContext,NotificationService::class.java)
+                        requireActivity().startService(intent)
                     }else{
-                        //TODO disattiva le notifiche
+                        sp.edit().putBoolean("NOTIFICATIONS",isChecked)
+//                        notificationService.stopNotificationService()
+                        val intent = Intent(requireActivity().applicationContext,NotificationService::class.java)
+                        requireActivity().stopService(intent)
                     }
                 }
 
             }
             else -> 0
         }
-    }
 
-    private fun location(){
 
-        if (ActivityCompat.checkSelfPermission(
-                requireContext().applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                requireContext().applicationContext,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    requireActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
-            ) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Necessaria autorizzazione posizione esatta")
-                    .setMessage("Per funzionare correttamente, l'applicazione necessita l'autorizzazione per accedere alla posizione precisa")
-                    .setPositiveButton(
-                        "OK"
-                    ) { _, _ ->
-                        //Prompt the user once explanation has been shown
-                        requestLocationPermission()
-                    }
-                    .create()
-                    .show()
-            } else {
-                // No explanation needed, we can request the permission.
-                requestLocationPermission()
+
+
+
+        var toolbartitle = requireActivity().findViewById<TextView>(R.id.toolbarTitle)
+        toolbartitle.text = settname
+        var backbtn = requireActivity().findViewById<AppCompatImageButton>(R.id.backButtonVendor)
+        backbtn.visibility = View.VISIBLE
+        backbtn.setOnClickListener{
+            parentFragmentManager.popBackStack()
+        }
+        vm?.getUser(requireActivity().intent.getStringExtra("email")!!,userType)
+        vm?.user?.observe(viewLifecycleOwner){
+            uservm ->
+            user = uservm
+
+            if(settname == "Account"){
+                name.setText(user.name)
+                email.setText(user.email)
+                numero.setText(user.phone)
             }
 
-        }else{
-            Log.d("Test","start ls" )
-            locationVM?.startLocationService()
+            if(user.userType){
+                vm?.getStore(user.email)
+            }
+            if(updateuser){
+                updateuser = false
+                Toast.makeText(context,"Modifiche Account apportate con successo",Toast.LENGTH_SHORT).show()
+            }
         }
+        vm?.store?.observe(viewLifecycleOwner){
+                storevm ->
+
+            store = storevm
+            if(settname == "Gestisci Store"){
+                storename.setText(store?.storeName)
+                categoria.setText(store?.storeCategory)
+                indirizzo.setText(store?.storeAddress)
+                if (store?.lat == null && store?.lon == null){
+                    alert.visibility = View.VISIBLE
+                } else {
+                    btnpos.text = "Aggiorna Posizione Store"
+                }
+            }
+            if(updatestore){
+                updatestore = false
+                Toast.makeText(context,"Modifiche dello Store apportate con successo",Toast.LENGTH_SHORT).show()
+            }
+            if(updatelocation){
+                updatelocation = false
+                Toast.makeText(context,"Posizione store aggiornata con successo",Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        locationVM?.locationData?.observe(viewLifecycleOwner){
+            locationdata ->
+            if(locationdata != null && !(locationdata.latitude == 0.0 && locationdata.longitude == 0.0)){
+                store?.lat = locationdata.latitude
+                store?.lon = locationdata.longitude
+                locationVM?.stopLocationUpdates()
+                vm?.insertStore(store!!)
+                updatelocation = true
+                alert.visibility = View.GONE
+                btnpos.text = "Aggiorna Posizione Store"
+                locationVM?.locationData?.value = null
+            }
+        }
+
+
     }
 
-    fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-            ),
-            locationVM!!.MY_PERMISSIONS_REQUEST_LOCATION
-        )
-    }
+
 }
