@@ -221,6 +221,12 @@ class viewModel(application: Application): AndroidViewModel(application) {
         repository.dbOrdersDataDAO?.insert(ord)
     }
 
+    fun clearBeforeLogout(){
+        user = null
+        store = null
+        inserito = null
+    }
+
     fun getOwner(id: Int){
         viewModelScope.launch(Dispatchers.IO){
             var res = getOwnerSus(id)

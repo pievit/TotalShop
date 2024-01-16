@@ -1,16 +1,21 @@
 package it.torino.totalshop.venditore
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.torino.totalshop.LocationViewModel
@@ -19,11 +24,14 @@ import it.torino.totalshop.R
 class VenditoreActivity : AppCompatActivity() {
 
     var locationVM : LocationViewModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.venditore_activity)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        var backbtn = findViewById<ImageButton>(R.id.backButtonVendor)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val host: NavHostFragment = supportFragmentManager
             .findFragmentById(R.id.venditore_nav_host_fragment) as NavHostFragment? ?: return
@@ -31,10 +39,28 @@ class VenditoreActivity : AppCompatActivity() {
         val navController = host.navController
         setupBottomNavMenu(navController)
 
-        navController.addOnDestinationChangedListener { _, destination, argument ->
-
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when(destination.id){
+                R.id.venditore_home -> {
+                    backbtn.visibility = View.GONE
+                    findViewById<Toolbar>(R.id.toolbarTitle).setTitle("Home Negozio")
+                }
+                R.id.venditore_ordini -> {
+                    backbtn.visibility = View.GONE
+                    findViewById<Toolbar>(R.id.toolbarTitle).setTitle("Ordini Store")
+                }
+                R.id.venditore_settings -> {
+                    backbtn.visibility = View.GONE
+                    findViewById<Toolbar>(R.id.toolbarTitle).setTitle("Settings")
+                }
+            }
             Log.d("ActivityVenditore", "Destination changed to ${destination.id}")
         }
+
+        backbtn.setOnClickListener{
+            navController.popBackStack()
+        }
+
         locationVM = ViewModelProvider(this)[LocationViewModel::class.java]
 
 
