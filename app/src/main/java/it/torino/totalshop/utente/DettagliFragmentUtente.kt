@@ -112,7 +112,7 @@ class DettagliFragmentUtente : Fragment() {
                         annDialog.dismiss()
                     }
                     annDialogView.findViewById<Button>(R.id.ann_dialog_ann_but).setOnClickListener{
-                        annullaOrdine()
+                        cancellaOrdine()
                     }
                 }
 
@@ -126,15 +126,15 @@ class DettagliFragmentUtente : Fragment() {
 
     }
 
-    fun annullaOrdine(){
+    fun cancellaOrdine(){
         var comment = annDialogView.findViewById<EditText>(R.id.ann_dialog_comment).text.toString()
         if(comment.length>10){
-            order?.status = "Annullato"
+            order?.status = "Cancellato"
             order?.comment = comment
             vm?.insertOrder(order!!)
             update()
             annDialog.dismiss()
-            Toast.makeText(requireActivity(),"Ordine Annullato", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(),"Ordine Cancellato", Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(requireActivity(),"Inserisci un commento di almeno 10 caratteri", Toast.LENGTH_SHORT).show()
         }

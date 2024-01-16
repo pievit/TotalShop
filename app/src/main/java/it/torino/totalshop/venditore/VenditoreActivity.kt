@@ -103,6 +103,11 @@ class VenditoreActivity : AppCompatActivity() {
             Log.d("Test","start ls" )
             locationVM?.startLocationService()
         }
+
+//        val notif = intent.getIntExtra("notifOrder",-1)
+//        if(notif>=0){
+//            navController.navigate(R.id.venditore_ordini)
+//        }
     }
 
 
@@ -145,7 +150,4 @@ class VenditoreActivity : AppCompatActivity() {
         )
     }
 
-    fun deleteProd(id: Int){
-
-    }
 }

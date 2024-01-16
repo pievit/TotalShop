@@ -97,6 +97,11 @@ class UtenteActivity : AppCompatActivity() {
             Log.d("Test","start ls" )
             locationVM?.startLocationService()
         }
+
+//        val notif = intent.getIntExtra("notifOrder",-1)
+//        if(notif>=0){
+//            navController.navigate(R.id.utente_ordini)
+//         }
     }
 
 
