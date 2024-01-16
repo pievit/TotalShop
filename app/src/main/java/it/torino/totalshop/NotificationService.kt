@@ -20,12 +20,15 @@ import it.torino.totalshop.venditore.VenditoreActivity
 import java.util.Timer
 import java.util.TimerTask
 
-class NotificationService(val appl: Application) : Service() {
+class NotificationService() : Service() {
     var NOTIFICATION_PERMISSION_ID: Int = 25
-    private val repository: Repository = Repository(appl)
-    val notificationManager: NotificationManager? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {appl.getSystemService(NotificationManager::class.java)} else null
+    private lateinit var repository: Repository
+    lateinit var notificationManager: NotificationManager
     lateinit var notificationManagerCompat: NotificationManagerCompat
     var notifyOrdersList: MutableMap<Int,String> = mutableMapOf()
+    val timer = Timer()
+    var flagtimer = false
+
 
     companion object{
         const val CHANNEL_NAME = "OrdersChannel"
@@ -34,9 +37,9 @@ class NotificationService(val appl: Application) : Service() {
     }
     override fun onCreate() {
         super.onCreate()
-        Log.d("Debug","Actual version -> "+Build.VERSION.SDK_INT.toString())
-        Log.d("Debug","API 26 -> "+Build.VERSION_CODES.O.toString())
+        repository = Repository(application)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager = application.getSystemService(NotificationManager::class.java)
             val notificationChannel = NotificationChannel(
                 CHANNEL_ID,
                 CHANNEL_NAME,
@@ -45,17 +48,32 @@ class NotificationService(val appl: Application) : Service() {
             notificationChannel.enableVibration(true)
             notificationChannel.enableLights(true)
 
-            notificationManager!!.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
             Log.d("debug","Channel creato: "+notificationChannel.id)
         }else{
             notificationManagerCompat = NotificationManagerCompat.from(this)
         }
 
 
+
     }
 
+    fun stopNotificationService(){
+        timer.cancel()
+        Log.d("Debug","Stop Servizio")
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if(flagtimer)
+            timer.cancel()
+        else
+            flagtimer=true
+        startNotificationService()
+        return START_STICKY
+    }
+
+
     fun startNotificationService(){
-        val timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
                 Log.d("Debug","Inizio service")
@@ -92,13 +110,14 @@ class NotificationService(val appl: Application) : Service() {
 
     @SuppressLint("MissingPermission")
     private fun sendNotificationNewOrder(mail: String,id :Int){
-        var sp = appl.getSharedPreferences("USER", Context.MODE_PRIVATE)
+        var sp = application.getSharedPreferences("USER", Context.MODE_PRIVATE)
         if(sp.getString("USER_EMAIL",null).equals(mail)){
-            val intent = Intent(appl.applicationContext, VenditoreActivity::class.java)
-                intent.putExtra("notifOrder",id)
-                intent.putExtra("email",mail)
-            pendingIntent = PendingIntent.getActivity(appl.applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            val notificationBuilder = NotificationCompat.Builder(appl.applicationContext, CHANNEL_ID)
+            val intent = Intent(applicationContext, VenditoreActivity::class.java)
+            intent.putExtra("notifOrder",id)
+            intent.putExtra("email",mail)
+            intent.putExtra("userType",true)
+            pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
                 .setContentTitle("Hai un nuovo ordine!")
                 .setContentText("Hai un nuovo ordine sul tuo store, vai a vederlo!")
                 .setSmallIcon(R.drawable.ic_orders)
@@ -117,13 +136,14 @@ class NotificationService(val appl: Application) : Service() {
 
     @SuppressLint("MissingPermission")
     private fun sendNotificationConfirmed(mail: String,id :Int){
-        var sp = appl.getSharedPreferences("USER", Context.MODE_PRIVATE)
+        var sp = application.getSharedPreferences("USER", Context.MODE_PRIVATE)
         if(sp.getString("USER_EMAIL",null).equals(mail)) {
-            val intent = Intent(appl.applicationContext, UtenteActivity::class.java)
+            val intent = Intent(applicationContext, UtenteActivity::class.java)
             intent.putExtra("notifOrder",id)
             intent.putExtra("email",mail)
-            pendingIntent = PendingIntent.getActivity(appl.applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            val notificationBuilder = NotificationCompat.Builder(appl.applicationContext, CHANNEL_NAME)
+            intent.putExtra("userType",false)
+            pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_NAME)
                 .setContentTitle("Il tuo ordine è stato confermato!")
                 .setContentText("Il tuo ordine è stato confermato dal venditore! Vai a vederlo sull'app!")
                 .setSmallIcon(R.drawable.ic_orders)
@@ -141,13 +161,14 @@ class NotificationService(val appl: Application) : Service() {
 
     @SuppressLint("MissingPermission")
     private fun sendNotificationCanceled(mail: String,id :Int){
-        var sp = appl.getSharedPreferences("USER", Context.MODE_PRIVATE)
+        var sp = application.getSharedPreferences("USER", Context.MODE_PRIVATE)
         if(sp.getString("USER_EMAIL",null).equals(mail)) {
-            val intent = Intent(appl.applicationContext, VenditoreActivity::class.java)
+            val intent = Intent(applicationContext, VenditoreActivity::class.java)
             intent.putExtra("notifOrder",id)
             intent.putExtra("email",mail)
-            pendingIntent = PendingIntent.getActivity(appl.applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-            val notificationBuilder = NotificationCompat.Builder(appl.applicationContext, CHANNEL_NAME)
+            intent.putExtra("userType",true)
+            pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_NAME)
                 .setContentTitle("Il tuo ordine è stato cancellato!")
                 .setContentText("Il tuo ordine è stato cancellato! Vai a vederlo sull'app!")
                 .setSmallIcon(R.drawable.ic_orders)
@@ -166,14 +187,15 @@ class NotificationService(val appl: Application) : Service() {
 
     @SuppressLint("MissingPermission")
     private fun sendNotificationAnnulled(mail: String,id :Int) {
-        var sp = appl.getSharedPreferences("USER", Context.MODE_PRIVATE)
+        var sp = application.getSharedPreferences("USER", Context.MODE_PRIVATE)
         if (sp.getString("USER_EMAIL", null).equals(mail)) {
-            val intent = Intent(appl.applicationContext, UtenteActivity::class.java)
+            val intent = Intent(applicationContext, UtenteActivity::class.java)
             intent.putExtra("notifOrder",id)
             intent.putExtra("email",mail)
-            pendingIntent = PendingIntent.getActivity(appl.applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            intent.putExtra("userType",false)
+            pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             val notificationBuilder =
-                NotificationCompat.Builder(appl.applicationContext, CHANNEL_NAME)
+                NotificationCompat.Builder(applicationContext, CHANNEL_NAME)
                     .setContentTitle("Il tuo ordine è stato annullato!")
                     .setContentText("Il tuo ordine è stato annullato! Vai a vederlo, sull'app!")
                     .setSmallIcon(R.drawable.ic_orders)
@@ -194,7 +216,8 @@ class NotificationService(val appl: Application) : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopSelf()
+        stopNotificationService()
+        flagtimer = false
         notifyOrdersList.clear()
     }
 }

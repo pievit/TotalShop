@@ -12,8 +12,7 @@ import com.google.gson.annotations.SerializedName
     foreignKeys = [ForeignKey(
         StoreData::class,
         arrayOf("id"),
-        arrayOf("storeId"),
-        ForeignKey.CASCADE
+        arrayOf("storeId")
     )]
 )
 class ProductsData(

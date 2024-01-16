@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentTransaction
@@ -37,14 +38,19 @@ class OrdersListFragmentVenditore : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]
-        recyclerView = view.findViewById(R.id.ordersList)
+        recyclerView = view.findViewById(R.id.venditoreOrdersList)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         adapter = ordAdapter(ordList) { selectedItem ->
             frag2.order = selectedItem
             if(isOrientationLandscape()){
                 //carica nel fragment
-                frag2.update()
+                with(parentFragmentManager.beginTransaction()) {
+                    replace(R.id.venditoreOrdiniInfoFragment, frag2 )
+                    setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    addToBackStack("utente_ord_info_list")
+                    commit()
+                }
 //                val newDetails = DettagliFragmentVenditore.newInstance(myCourseCode)
 //                childFragmentManager.beginTransaction().replace(R.id.ordini_info, newDetails)
 //                setTransition(androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -53,7 +59,7 @@ class OrdersListFragmentVenditore : Fragment() {
             } else {
                 //due pagine diverse
                 with(parentFragmentManager.beginTransaction()) {
-                    replace(R.id.ordiniListFragment, frag2 )
+                    replace(R.id.venditoreOrdiniListFragment, frag2 )
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     addToBackStack("ord_info_list")
                     commit()
@@ -70,13 +76,19 @@ class OrdersListFragmentVenditore : Fragment() {
             Log.d("Test",myStore.storeName)
             vm?.getAllOrdersFromStoreID(myStore.id)
         }
+        var noordtext : TextView = view.findViewById(R.id.venditore_no_ord)
         vm!!.ordList.observe(viewLifecycleOwner){
                 pl ->
             Log.d("Test","qui")
             if(pl!=null){
-                Log.d("Test",pl.toString())
-                ordList = pl as ArrayList<OrdersData>
-                adapter.setFilteredList(ordList)
+                if(pl.size>0){
+                    noordtext.visibility = View.GONE
+                    Log.d("Test",pl.toString())
+                    ordList = pl as ArrayList<OrdersData>
+                    adapter.setFilteredList(ordList)
+                }else{
+                    noordtext.visibility = View.VISIBLE
+                }
             }
         }
     }

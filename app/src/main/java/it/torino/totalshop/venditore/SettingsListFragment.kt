@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -40,10 +42,16 @@ class SettingsListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var toolbartitle = requireActivity().findViewById<TextView>(R.id.toolbarTitle)
+        toolbartitle.text = "Settings"
+        var backbtn = requireActivity().findViewById<AppCompatImageButton>(R.id.backButtonVendor)
+        backbtn.visibility = View.INVISIBLE
         vm?.getUser(requireActivity().intent.getStringExtra("email")!!,requireActivity().intent.getBooleanExtra("userType",false))
         vm?.user?.observe(viewLifecycleOwner){
                 uservm ->
             user = uservm
+            view.findViewById<TextView>(R.id.user_settings_email).text = user.email
+            view.findViewById<TextView>(R.id.user_settings_name).text = user.name
             if(user.userType){
                 vm?.getStore(user.email)
             }
@@ -75,7 +83,7 @@ class SettingsListFragment : Fragment() {
         items.add(Pair("person_24px","Account"))
         items.add(Pair("store_logo_24px","Gestisci Store"))
         items.add(Pair("lock_24px","Modifica Password"))
-        items.add(Pair("notification_24px","Gestisci Notifiche"))
+        items.add(Pair("notifications_24px","Gestisci Notifiche"))
         items.add(Pair("logout_24px","Logout"))
 
         recview = view.findViewById(R.id.user_settings_recview)
@@ -87,12 +95,14 @@ class SettingsListFragment : Fragment() {
                     logoutDialog.show()
 
                 }else{
-                    frag2.arguments?.putString("settname", selectedItem)
-                    var fragMan = childFragmentManager.beginTransaction()
+                    frag2.settname = selectedItem
+                    var fragMan = parentFragmentManager.beginTransaction()
                     fragMan.replace(R.id.user_settings_fragmentview,frag2)
-                    fragMan.addToBackStack(null)
+                    fragMan.addToBackStack("settings")
                     fragMan.commit()
                 }
         }
+
+        recview.adapter = adapter
     }
 }

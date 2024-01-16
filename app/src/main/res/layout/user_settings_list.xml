@@ -12,9 +12,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Rossi"
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:id="@+id/user_settings_name"
         android:textStyle="bold"
+        android:layout_marginStart="8dp"
         />
     <TextView
         android:layout_width="match_parent"
@@ -26,6 +27,8 @@
         android:layout_marginBottom="15dp"
         android:id="@+id/user_settings_email"
         android:text="example@gmail.com"
+        android:layout_marginStart="8dp"
+        android:textSize="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -24,7 +25,6 @@ class OrdersListFragmentUtente : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private var ordList = ArrayList<OrdersData>()
     private lateinit var adapter: ordAdapter
-    private lateinit var myStore : StoreData
     private var frag2 = DettagliFragmentUtente()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,15 +71,21 @@ class OrdersListFragmentUtente : Fragment() {
             Log.d("Item clicked: ",selectedItem.toString())
         }
         recyclerView.adapter = adapter
+        var noordtext : TextView = view.findViewById(R.id.utente_no_ord)
         Log.d("Test", requireActivity().intent.getStringExtra("email")!!)
         vm?.getAllOrdersFromEmail(requireActivity().intent.getStringExtra("email")!!)
         vm!!.ordList.observe(viewLifecycleOwner){
                 pl ->
             Log.d("Test","qui")
             if(pl!=null){
-                Log.d("Test",pl.toString())
-                ordList = pl as ArrayList<OrdersData>
-                adapter.setFilteredList(ordList)
+                if(pl.size>0){
+                    noordtext.visibility = View.GONE
+                    Log.d("Test",pl.toString())
+                    ordList = pl as ArrayList<OrdersData>
+                    adapter.setFilteredList(ordList)
+                }else{
+                    noordtext.visibility = View.VISIBLE
+                }
             }
         }
     }
