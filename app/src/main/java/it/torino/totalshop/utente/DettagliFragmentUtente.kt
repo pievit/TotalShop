@@ -3,7 +3,6 @@ package it.torino.totalshop.utente
 import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,12 +20,12 @@ import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.ProdsList
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 import org.apache.commons.text.StringEscapeUtils
 import kotlin.math.roundToInt
 
 class DettagliFragmentUtente : Fragment() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     var order : OrdersData? = null
     private lateinit var annDialog: AlertDialog
     private lateinit var annDialogView: View
@@ -36,12 +35,13 @@ class DettagliFragmentUtente : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.utente_ordini_info, container, false)
         view.findViewById<FloatingActionButton>(R.id.user_floatingbtn).setOnClickListener {
             parentFragmentManager.popBackStack()
         }
+
         if(isOrientationLandscape()){
             view.findViewById<FloatingActionButton>(R.id.user_floatingbtn).visibility = View.INVISIBLE
         }else{
@@ -52,7 +52,10 @@ class DettagliFragmentUtente : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if(order != null){
+            view.visibility = View.VISIBLE
             update()
+        }else{
+            view.visibility = View.INVISIBLE
         }
 
         vm?.store?.observe(viewLifecycleOwner){
@@ -95,8 +98,14 @@ class DettagliFragmentUtente : Fragment() {
             view?.findViewById<TextView>(R.id.user_ord_inf_id)?.text = "Ordine N." + order?.id
             view?.findViewById<TextView>(R.id.user_ord_inf_data)?.text = order?.dataOrd
             view?.findViewById<TextView>(R.id.user_ord_inf_status)?.text = order?.status
-            view?.findViewById<TextView>(R.id.user_ord_inf_commento)?.text = order?.comment
-
+            if(order?.status != "nuovo") {
+                view?.findViewById<TextView>(R.id.user_ord_inf_commento)?.visibility = View.VISIBLE
+                view?.findViewById<TextView>(R.id.user_comment_title)?.visibility = View.VISIBLE
+                view?.findViewById<TextView>(R.id.user_ord_inf_commento)?.text = order?.comment
+            }else{
+                view?.findViewById<TextView>(R.id.user_comment_title)?.visibility = View.GONE
+                view?.findViewById<TextView>(R.id.user_ord_inf_commento)?.visibility = View.GONE
+            }
             var sum = prods.keys.sumOf { key ->
                 (key.price * prods.get(key)!!).toDouble()
             }

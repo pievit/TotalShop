@@ -13,15 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
 import it.torino.totalshop.adapter.UserSettingsAdapter
 import it.torino.totalshop.login.LoginActivity
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 class SettingsListFragment : Fragment() {
-    private var vm : viewModel? = null
+    private var vm : RoomViewModel? = null
     private var store : StoreData? = null
     private lateinit var user : UsersData
     private lateinit var recview : RecyclerView
@@ -34,7 +35,7 @@ class SettingsListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         return inflater.inflate(R.layout.user_settings_list,container,false)
     }
 
@@ -66,6 +67,8 @@ class SettingsListFragment : Fragment() {
                     _,_ ->
                 var sp = requireActivity().getSharedPreferences("USER",Context.MODE_PRIVATE)
                 sp.edit().clear().apply()
+                val intentstopNot = Intent(requireActivity().applicationContext, NotificationService::class.java)
+                requireActivity().stopService(intentstopNot)
                 vm?.clearBeforeLogout()
                 var intent = Intent(activity, LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

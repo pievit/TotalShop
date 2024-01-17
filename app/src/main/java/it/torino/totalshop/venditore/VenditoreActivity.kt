@@ -2,7 +2,10 @@ package it.torino.totalshop.venditore
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.torino.totalshop.LocationViewModel
+import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
 
 class VenditoreActivity : AppCompatActivity() {
@@ -99,6 +103,21 @@ class VenditoreActivity : AppCompatActivity() {
             }
 
         }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestNotificationPermission()
+            return
+        }else{
+            Log.d("VenditoreActivity","Start Notification service with permissions")
+            var sp = getSharedPreferences("NOTIFY", Context.MODE_PRIVATE)
+            if(sp.getBoolean("NOTIFICATIONS",false)){
+                val intentNotif = Intent(this, NotificationService::class.java)
+                startService(intentNotif)
+            }
+        }
     }
 
 
@@ -117,6 +136,18 @@ class VenditoreActivity : AppCompatActivity() {
                 ) {
                     locationVM!!.startLocationService()
                     locationVM!!.stopLocationUpdates()
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return
+            }
+            NotificationService.NOTIFICATION_PERMISSION_ID -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    getSharedPreferences("NOTIFY", Context.MODE_PRIVATE).edit().putBoolean("NOTIFICATIONS",true).apply()
+                    val intentNotif = Intent(this, NotificationService::class.java)
+                    startService(intentNotif)
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -142,4 +173,15 @@ class VenditoreActivity : AppCompatActivity() {
         )
     }
 
+    fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ),
+                NotificationService.NOTIFICATION_PERMISSION_ID
+            )
+        }
+    }
 }

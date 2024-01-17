@@ -17,11 +17,11 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 
 class LoginActivity : AppCompatActivity() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,43 +54,8 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-        this.vm = ViewModelProvider(this)[viewModel::class.java]
+        this.vm = ViewModelProvider(this)[RoomViewModel::class.java]
 
-        this.vm!!.usersList.observe(this){
-            list -> Log.d("Test","Users: " + list.toString())
-        }
-
-        this.vm!!.storesList.observe(this){
-            list -> Log.d("Test","Stores: " + list.toString())
-        }
-
-
-        this.vm?.getUsers()
-        this.vm?.getStores()
-//notificationService = NotificationService(application)
-////        notificationService.onDestroy()
-
-//        stopService(intentNotif)
-//        notificationService = NotificationService()
-//        notificationService.onDestroy()
-//        notificationService.onCreate()
-
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestNotificationPermission()
-            return
-        }else{
-            Log.d("Debug","Start Notification service")
-            var sp = getSharedPreferences("NOTIFY",Context.MODE_PRIVATE)
-            if(sp.getBoolean("NOTIFICATIONS",false)){
-                val intentNotif = Intent(this,NotificationService::class.java)
-                startService(intentNotif)
-            }
-        }
     }
 
 
@@ -112,17 +77,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.POST_NOTIFICATIONS,
-                ),
-                NotificationService.NOTIFICATION_PERMISSION_ID
-            )
-        }
-    }
+
 
 
 }

@@ -13,20 +13,19 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import it.torino.totalshop.login.LoginActivity
 import it.torino.totalshop.roomdb.Repository
 import it.torino.totalshop.utente.UtenteActivity
 import it.torino.totalshop.venditore.VenditoreActivity
-import java.util.Timer
-import java.util.TimerTask
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 
 class NotificationService() : Service() {
     private lateinit var repository: Repository
     lateinit var notificationManager: NotificationManager
     lateinit var notificationManagerCompat: NotificationManagerCompat
     var notifyOrdersList: MutableMap<Int,String> = mutableMapOf()
-    val timer = Timer()
-    var flagtimer = false
+    lateinit var scheduler : ScheduledExecutorService
 
 
     companion object{
@@ -37,6 +36,7 @@ class NotificationService() : Service() {
     }
     override fun onCreate() {
         super.onCreate()
+        scheduler = Executors.newScheduledThreadPool(1)
         repository = Repository(application)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationManager = application.getSystemService(NotificationManager::class.java)
@@ -49,7 +49,7 @@ class NotificationService() : Service() {
             notificationChannel.enableLights(true)
 
             notificationManager.createNotificationChannel(notificationChannel)
-            Log.d("debug","Channel creato: "+notificationChannel.id)
+            Log.d("NotificationLog","Channel creato: "+notificationChannel.id)
         }else{
             notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
         }
@@ -59,52 +59,48 @@ class NotificationService() : Service() {
     }
 
     fun stopNotificationService(){
-        timer.cancel()
-        Log.d("Debug","Stop Servizio")
+        scheduler.shutdown()
+        Log.d("NotificationLog","Stop Servizio")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(flagtimer)
-            timer.cancel()
-        else
-            flagtimer=true
+        scheduler.shutdown()
         startNotificationService()
         return START_STICKY
     }
 
 
     fun startNotificationService(){
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                Log.d("Debug","Inizio service")
-                var ordersList = repository.dbOrdersDataDAO?.getAllOrders()
-                if(ordersList!=null){
-                    for(ord in ordersList){
-                        var vendor = repository.dbStoreDataDAO?.getOwner(ord.storeId)
-                        if(!ord.status.equals("nuovo")){
-                            if(notifyOrdersList.contains(ord.id) && notifyOrdersList.get(ord.id).equals("nuovo")){
-                                Log.d("Debug",ord.status)
-                                when(ord.status){
-                                   "Confermato"-> sendNotificationConfirmed(ord.usermail,ord.id)
-                                    "Annullato" -> sendNotificationAnnulled(ord.usermail,ord.id)
-                                    "Cancellato" -> sendNotificationCanceled(vendor!!.email,ord.id)
-                                }
-
-                                notifyOrdersList.remove(ord.id)
+        val initialDelay = 0L
+        val period = 30L
+        scheduler = Executors.newScheduledThreadPool(1)
+        scheduler.scheduleAtFixedRate({
+            Log.d("NotificationLog","Inizio servizio")
+            var ordersList = repository.dbOrdersDataDAO?.getAllOrders()
+            if(ordersList!=null){
+                for(ord in ordersList){
+                    var vendor = repository.dbStoreDataDAO?.getOwner(ord.storeId)
+                    if(!ord.status.equals("nuovo")){
+                        if(notifyOrdersList.contains(ord.id) && notifyOrdersList.get(ord.id).equals("nuovo")){
+                            when(ord.status){
+                                "Confermato"-> sendNotificationConfirmed(ord.usermail,ord.id)
+                                "Annullato" -> sendNotificationAnnulled(ord.usermail,ord.id)
+                                "Cancellato" -> sendNotificationCanceled(vendor!!.email,ord.id)
                             }
 
+                            notifyOrdersList.remove(ord.id)
+                        }
 
-                        }else{
-                            if(!notifyOrdersList.contains(ord.id)){
-                                Log.d("Debug","Inserito new prod")
-                                notifyOrdersList.put(ord.id,ord.status)
-                                sendNotificationNewOrder(vendor!!.email,ord.id)
-                            }
+
+                    }else{
+                        if(!notifyOrdersList.contains(ord.id)){
+                            notifyOrdersList.put(ord.id,ord.status)
+                            sendNotificationNewOrder(vendor!!.email,ord.id)
                         }
                     }
                 }
             }
-        }, 0, 30000)
+        }, initialDelay, period, TimeUnit.SECONDS)
     }
 
 
@@ -129,7 +125,7 @@ class NotificationService() : Service() {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
 
-        Log.d("Debug","Notification : user ->"+mail)
+        Log.d("NotificationLog","Notification : user ->"+mail)
         }
     }
 
@@ -156,7 +152,7 @@ class NotificationService() : Service() {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
         }
-        Log.d("Debug","Notification : user ->"+mail)
+        Log.d("NotificationLog","Notification : user ->"+mail)
     }
 
     @SuppressLint("MissingPermission")
@@ -181,7 +177,7 @@ class NotificationService() : Service() {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
         }
-        Log.d("Debug","Notification : user ->"+mail)
+        Log.d("NotificationLog","Notification : user ->"+mail)
     }
 
 
@@ -207,7 +203,7 @@ class NotificationService() : Service() {
             } else {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
-            Log.d("Debug", "Notification : user ->" + mail)
+            Log.d("NotificationLog", "Notification : user ->" + mail)
         }
     }
     override fun onBind(intent: Intent): IBinder? {
@@ -217,7 +213,5 @@ class NotificationService() : Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopNotificationService()
-        flagtimer = false
-        notifyOrdersList.clear()
     }
 }

@@ -35,7 +35,6 @@ class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) ->
 //        var ordProdList: ProdsList = ProdsList(emptyMap<ProductsData, Int>())
         if (lp.length != 0) {
             lp = StringEscapeUtils.unescapeJava(lp)
-            Log.d("Debug",lp)
             val type = object : TypeToken<Map<String, Int>>() {}.type
             val objectMap: Map<String, Int> = Gson().fromJson(lp, type)
 
@@ -55,7 +54,6 @@ class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) ->
             } else {
                 "$c articolo"
             }
-            Log.d("Debug", objectMap.keys.toString())
             var prods : MutableMap<ProductsData, Int> = mutableMapOf<ProductsData, Int>()
 
             objectMap.keys.forEach {
@@ -65,8 +63,6 @@ class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) ->
                 prods[p] = objectMap.get(it)!!
             }
 
-
-            Log.d("Test1", prods.toString())
 
             var sum = prods.keys.sumOf{
                     key ->

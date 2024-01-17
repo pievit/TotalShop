@@ -16,17 +16,17 @@ import androidx.navigation.fragment.navArgs
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 class RegisterFragment: Fragment() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     var ins: Boolean = false
     var userType: Int = arguments?.getInt("UserType") ?: 0
     var button: Button? = null
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.register, container, false)
         val safeArgs: RegisterFragmentArgs by navArgs()
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         if(safeArgs.UserType == 1) {
             val constraintLayout = view.findViewById<ConstraintLayout>(R.id.cont2)
             val layoutInflater = LayoutInflater.from(context)
@@ -44,10 +44,8 @@ class RegisterFragment: Fragment() {
         vm?.user?.observe(viewLifecycleOwner){
             res ->
             if(res != null){
-                Log.d("debug","enterObs")
                 if(ins){
                     if(arguments?.getInt("UserType")==1){
-                        Log.d("Debug","enterVendor")
                         var storeName = view?.findViewById<TextView>(R.id.businessname)?.text.toString()
                         var storeAddress = view?.findViewById<TextView>(R.id.businsessaddress)?.text.toString()
                         var storeCategory = view?.findViewById<TextView>(R.id.businesscategory)?.text.toString()
@@ -55,7 +53,6 @@ class RegisterFragment: Fragment() {
                         vm?.insertStore(storeData)
 
                     }else{
-                        Log.d("debug","enterUser")
                         Toast.makeText(context,"Registrazione utente effettuata", Toast.LENGTH_SHORT).show()
                         button?.isEnabled = true
                         findNavController().popBackStack().also { vm!!.user?.value = null }
@@ -69,7 +66,6 @@ class RegisterFragment: Fragment() {
 
         vm?.store?.observe(viewLifecycleOwner){
             res ->
-            Log.d("debug","store: "+res.toString())
             if(res!=null){
 
                 Toast.makeText(context,"Registrazione venditore effettuata", Toast.LENGTH_SHORT).show()
@@ -87,10 +83,22 @@ class RegisterFragment: Fragment() {
         }
 
         view.findViewById<View>(R.id.regbtn)?.setOnClickListener {
-            register()
+            if(regexData())
+                register()
+            else
+                Toast.makeText(context, "Dati inseriti non validi. Riprova",Toast.LENGTH_SHORT).show()
         }
     }
 
+    fun regexData() : Boolean {
+        var email = view?.findViewById<TextView>(R.id.reguser)?.text.toString()
+        var pass = view?.findViewById<TextView>(R.id.regpass)?.text.toString()
+        var phone = view?.findViewById<TextView>(R.id.regphone)?.text.toString()
+
+        val phonereg = Regex("\\A(\\+39)?[0-9]{9,10}\$")
+        val emailreg = Regex("\\A([a-zA-Z0-9\\.\\-])+(@)?([a-zA-Z\\-]{2,})(\\.{1}[a-zA-Z]{2,}){1,2}\$")
+        return pass.length>=4 && phone.matches(phonereg) && email.matches(emailreg)
+    }
     fun register(){
 
         button?.isEnabled = false

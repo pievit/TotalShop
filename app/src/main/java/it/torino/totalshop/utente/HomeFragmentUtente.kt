@@ -16,19 +16,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.LocationViewModel
 import it.torino.totalshop.R
+import it.torino.totalshop.RoomViewModel
+import it.torino.totalshop.adapter.storeAdapter
 import it.torino.totalshop.roomdb.entities.LocationData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
-import it.torino.totalshop.adapter.storeAdapter
-import it.torino.totalshop.viewModel
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 
 class HomeFragmentUtente: Fragment() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     var locationVM: LocationViewModel? = null
     var radius: Int = 500
     private lateinit var recyclerView: RecyclerView
@@ -38,7 +40,7 @@ class HomeFragmentUtente: Fragment() {
     private lateinit var adapter: storeAdapter
     var myCoord: LocationData = LocationData(0.0,0.0)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         locationVM = ViewModelProvider(requireActivity())[LocationViewModel::class.java]
         return inflater.inflate(R.layout.utente_home, container, false)
     }
@@ -53,7 +55,6 @@ class HomeFragmentUtente: Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
         adapter = storeAdapter(mList) { selectedItem ->
-//            Log.d("Item clicked: ",selectedItem.toString())
             arguments?.putInt("storeId",selectedItem.id)
             arguments?.putString("storeName",selectedItem.storeName)
             arguments?.putString("storeCategory",selectedItem.storeCategory)
@@ -81,6 +82,7 @@ class HomeFragmentUtente: Fragment() {
         radiusMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { menuItem -> // Toast message on menu item clicked
             radius = menuItem.title.toString().toInt()
             Toast.makeText(requireActivity(),"Raggio di ricerca stores impostato su $radius metri.",Toast.LENGTH_SHORT).show()
+            updateStoresList()
             true
         })
 
@@ -118,31 +120,28 @@ class HomeFragmentUtente: Fragment() {
     private fun updateStoresList(){
         var nearStoreList: ArrayList<StoreData> = ArrayList()
 
-        for(r: StoreData in vm!!.storesList.value!!){
+        for(r: StoreData in mList){
             if(r.lat != null && r.lon != null){
-                val R = 6371e3; // metres
-                val var1 = myCoord.latitude * Math.PI/180; // φ, λ in radians
-                val var2 = (r.lat!! * Math.PI)/180;
-                val delt1 = (r.lat!!-myCoord.latitude) * Math.PI/180;
-                val delt2 = (r.lon!!-myCoord.longitude) * Math.PI/180;
+                val earthRadius = 6371.0 // Earth's radius in kilometers
 
-                val a = sin(delt1/2) * sin(delt1/2) +
-                        cos(var1) * cos(var2) *
-                        sin(delt2/2) * sin(delt2/2);
-                val c = 2 * atan2(sqrt(a), sqrt(1-a));
+                val dLat = Math.toRadians(r.lat!! - myCoord.latitude)
+                val dLon = Math.toRadians(r.lon!! - myCoord.longitude)
 
-                val d = R * c; //distanza in metri
+                val a = sin(dLat / 2) * sin(dLat / 2) +
+                        cos(Math.toRadians(r.lat!!)) * cos(Math.toRadians(myCoord.latitude)) *
+                        sin(dLon / 2) * sin(dLon / 2)
 
-                if(d<= radius){
+                val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+                val distance = earthRadius * c
+                if(distance<= (radius/1000)){
                     nearStoreList.add(r)
                 }
             }
 
         }
 
-        mList = nearStoreList
-        Log.d("Test",mList.toString())
-        adapter.setFilteredList(mList)
+        adapter.setFilteredList(nearStoreList)
     }
 
     private fun updateList(newText: String?){
