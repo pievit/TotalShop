@@ -19,7 +19,7 @@ import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.LocationData
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
-import it.torino.totalshop.storeAdapter
+import it.torino.totalshop.adapter.storeAdapter
 import it.torino.totalshop.viewModel
 import kotlin.math.atan2
 import kotlin.math.cos

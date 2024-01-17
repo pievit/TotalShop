@@ -22,7 +22,6 @@ import it.torino.totalshop.viewModel
 
 class LoginActivity : AppCompatActivity() {
     var vm: viewModel? = null
-    lateinit var notificationService: NotificationService
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            notificationService.NOTIFICATION_PERMISSION_ID -> {
+            NotificationService.NOTIFICATION_PERMISSION_ID -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     getSharedPreferences("NOTIFY",Context.MODE_PRIVATE).edit().putBoolean("NOTIFICATIONS",true).apply()
@@ -120,7 +119,7 @@ class LoginActivity : AppCompatActivity() {
                 arrayOf(
                     Manifest.permission.POST_NOTIFICATIONS,
                 ),
-                notificationService.NOTIFICATION_PERMISSION_ID
+                NotificationService.NOTIFICATION_PERMISSION_ID
             )
         }
     }

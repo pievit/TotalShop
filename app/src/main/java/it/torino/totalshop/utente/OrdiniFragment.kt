@@ -7,17 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.R
-import it.torino.totalshop.ordAdapter
-import it.torino.totalshop.roomdb.entities.OrdersData
-import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.viewModel
 
 class OrdiniFragment : Fragment() {

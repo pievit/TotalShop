@@ -1,10 +1,7 @@
 package it.torino.totalshop.venditore
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import it.torino.totalshop.LocationViewModel
-import it.torino.totalshop.ProdsAdapter
+import it.torino.totalshop.adapter.ProdsAdapter
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
-import it.torino.totalshop.storeAdapter
 import it.torino.totalshop.viewModel
 
 class HomeFragmentVenditore : Fragment() {
@@ -101,13 +96,13 @@ class HomeFragmentVenditore : Fragment() {
         val deleteBuilder = AlertDialog.Builder(requireActivity())
         deleteBuilder.setMessage("Vuoi eliminare questo Prodotto ?")
             .setPositiveButton("Elimina"){
-                dialog,id ->
+                    _, _ ->
                 vm?.deleteProd(delProd)
                 Toast.makeText(requireActivity(),"Prodotto eliminato.",Toast.LENGTH_SHORT).show()
             }
 
             .setNegativeButton("Indietro"){
-                dialog,id -> delDialog.dismiss()
+                _, _ -> delDialog.dismiss()
             }
         delDialog = deleteBuilder.create()
     }

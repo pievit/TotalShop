@@ -5,10 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import it.torino.totalshop.roomdb.ProdsConverter
-import it.torino.totalshop.roomdb.ProdsList
-import java.util.Date
 
 @Entity(
     indices = [Index("id")], foreignKeys = [

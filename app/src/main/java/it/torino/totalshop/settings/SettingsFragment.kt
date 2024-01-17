@@ -1,27 +1,17 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.R
-import it.torino.totalshop.UserSettingsAdapter
-import it.torino.totalshop.roomdb.entities.StoreData
-import it.torino.totalshop.roomdb.entities.UsersData
 import it.torino.totalshop.viewModel
 
-class SettingsFragmentVenditore : Fragment() {
+class SettingsFragment : Fragment() {
+
     private var vm: viewModel? = null
-    private lateinit var user: UsersData
-    private lateinit var store: StoreData
-    private lateinit var recview: RecyclerView
-    private lateinit var adapter: UserSettingsAdapter
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         vm = ViewModelProvider(requireActivity())[viewModel::class.java]

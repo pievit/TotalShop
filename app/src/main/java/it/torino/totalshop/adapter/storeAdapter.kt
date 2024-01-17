@@ -1,4 +1,4 @@
-package it.torino.totalshop
+package it.torino.totalshop.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.StoreData
 
 class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> Unit) : RecyclerView.Adapter<storeAdapter.StoresViewHolder>(){
@@ -18,7 +19,7 @@ class storeAdapter(var mList: List<StoreData>, val onItemClick: (StoreData) -> U
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StoresViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.store_item_list , parent , false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.store_item_list, parent , false)
         return StoresViewHolder(view)
     }
 
