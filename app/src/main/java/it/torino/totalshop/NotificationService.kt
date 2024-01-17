@@ -21,7 +21,6 @@ import java.util.Timer
 import java.util.TimerTask
 
 class NotificationService() : Service() {
-    var NOTIFICATION_PERMISSION_ID: Int = 25
     private lateinit var repository: Repository
     lateinit var notificationManager: NotificationManager
     lateinit var notificationManagerCompat: NotificationManagerCompat
@@ -31,6 +30,7 @@ class NotificationService() : Service() {
 
 
     companion object{
+        const val NOTIFICATION_PERMISSION_ID: Int = 25
         const val CHANNEL_NAME = "OrdersChannel"
         const val CHANNEL_ID = "TotalShopNotificationServiceChannel"
         var pendingIntent: PendingIntent? = null
@@ -51,7 +51,7 @@ class NotificationService() : Service() {
             notificationManager.createNotificationChannel(notificationChannel)
             Log.d("debug","Channel creato: "+notificationChannel.id)
         }else{
-            notificationManagerCompat = NotificationManagerCompat.from(this)
+            notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
         }
 
 
@@ -110,7 +110,7 @@ class NotificationService() : Service() {
 
     @SuppressLint("MissingPermission")
     private fun sendNotificationNewOrder(mail: String,id :Int){
-        var sp = application.getSharedPreferences("USER", Context.MODE_PRIVATE)
+        val sp = application.getSharedPreferences("USER", Context.MODE_PRIVATE)
         if(sp.getString("USER_EMAIL",null).equals(mail)){
             val intent = Intent(applicationContext, VenditoreActivity::class.java)
             intent.putExtra("notifOrder",id)
@@ -124,7 +124,7 @@ class NotificationService() : Service() {
                 .setContentIntent(pendingIntent)
                 .build()
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                notificationManager!!.notify(1, notificationBuilder)
+                notificationManager.notify(1, notificationBuilder)
             }else{
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
@@ -169,8 +169,8 @@ class NotificationService() : Service() {
             intent.putExtra("userType",true)
             pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
             val notificationBuilder = NotificationCompat.Builder(applicationContext, CHANNEL_NAME)
-                .setContentTitle("Il tuo ordine è stato cancellato!")
-                .setContentText("Il tuo ordine è stato cancellato! Vai a vederlo sull'app!")
+                .setContentTitle("Un Utente ha cancellato il suo ordine!")
+                .setContentText("Un ordine è stato cancellato dall'Utente! Vai a vederlo sull'app!")
                 .setSmallIcon(R.drawable.ic_orders)
                 .setChannelId(CHANNEL_ID.toString())
                 .setContentIntent(pendingIntent)
@@ -197,7 +197,7 @@ class NotificationService() : Service() {
             val notificationBuilder =
                 NotificationCompat.Builder(applicationContext, CHANNEL_NAME)
                     .setContentTitle("Il tuo ordine è stato annullato!")
-                    .setContentText("Il tuo ordine è stato annullato! Vai a vederlo, sull'app!")
+                    .setContentText("Il tuo ordine è stato annullato dal venditore! Vai a vederlo, sull'app!")
                     .setSmallIcon(R.drawable.ic_orders)
                     .setChannelId(CHANNEL_ID.toString())
                     .setContentIntent(pendingIntent)

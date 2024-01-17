@@ -1,20 +1,18 @@
-package it.torino.totalshop
+package it.torino.totalshop.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.ProdsList
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.roomdb.entities.StoreData
 import org.apache.commons.text.StringEscapeUtils
-import java.lang.Float
 import kotlin.math.roundToInt
 
 class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) -> Unit) : RecyclerView.Adapter<ordAdapter.OrdViewHolder>(){
@@ -27,7 +25,7 @@ class ordAdapter(var ordList: List<OrdersData>, val onItemClick: (OrdersData) ->
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.orders_list , parent , false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.orders_list, parent , false)
         return OrdViewHolder(view)
     }
 

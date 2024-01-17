@@ -10,6 +10,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
@@ -31,7 +33,7 @@ class UtenteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.utente_activity)
-
+        var backbtn = findViewById<ImageButton>(R.id.backButton)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -42,16 +44,37 @@ class UtenteActivity : AppCompatActivity() {
         val navController = host.navController
         setupBottomNavMenu(navController)
 
-        val backbutUser = findViewById<AppCompatImageButton>(R.id.backButtonUser)
-        backbutUser.setOnClickListener{
+        backbtn.setOnClickListener{
             navController.popBackStack()
         }
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Log.d("ActivityUtente", "Destination changed to ${destination.id}")
             when (destination.id) {
-                R.id.utente_prod_sel -> backbutUser.visibility = VISIBLE;
-                else -> backbutUser.visibility = GONE;
+                R.id.utente_prod_sel -> backbtn.visibility = VISIBLE;
+                else -> backbtn.visibility = GONE;
             }
+        }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when(destination.id){
+                R.id.utente_prod_sel -> {
+                    backbtn.visibility = VISIBLE
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Prodotti Store")
+                }
+                R.id.utente_home -> {
+                    backbtn.visibility = View.GONE
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Home")
+                }
+                R.id.utente_ordini -> {
+                    backbtn.visibility = View.GONE
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Ordini Utente")
+                }
+                R.id.utente_settings -> {
+                    backbtn.visibility = View.GONE
+                    findViewById<TextView>(R.id.toolbarTitle).setText("Settings")
+                }
+            }
+            Log.d("ActivityVenditore", "Destination changed to ${destination.id}")
         }
 
 

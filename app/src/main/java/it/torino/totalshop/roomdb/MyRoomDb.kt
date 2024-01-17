@@ -3,8 +3,6 @@ package it.torino.totalshop.roomdb
 import android.content.Context
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.OrdersDataDAO
 import it.torino.totalshop.roomdb.entities.ProductsData

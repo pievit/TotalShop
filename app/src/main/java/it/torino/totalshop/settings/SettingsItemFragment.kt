@@ -1,12 +1,8 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.settings
 
-import android.Manifest
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +10,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.switchmaterial.SwitchMaterial
 import it.torino.totalshop.LocationViewModel
 import it.torino.totalshop.NotificationService
@@ -90,12 +83,12 @@ class SettingsItemFragment : Fragment() {
                 numero = view.findViewById(R.id.user_settings_item_account_phone)
 
                 name.addTextChangedListener {
-                        text ->
+                        _ ->
                     btn.setEnabled(true)
                 }
 
                 numero.addTextChangedListener {
-                        text ->
+                        _ ->
                     btn.setEnabled(true)
                 }
                 btn.setOnClickListener(){
@@ -114,7 +107,7 @@ class SettingsItemFragment : Fragment() {
 
                 var newpsw2 = view.findViewById<EditText>(R.id.user_settings_item_password_newpass2)
                 newpsw2.addTextChangedListener {
-                        text ->
+                        _ ->
                     btn.setEnabled(true)
                 }
                 btn.setOnClickListener(){
@@ -138,15 +131,15 @@ class SettingsItemFragment : Fragment() {
                 indirizzo = view.findViewById(R.id.user_settings_item_store_indirizzo)
 
                 storename.addTextChangedListener {
-                        text ->
+                        _ ->
                     btn.setEnabled(true)
                 }
                 categoria.addTextChangedListener {
-                        text ->
+                        _ ->
                     btn.setEnabled(true)
                 }
                 indirizzo.addTextChangedListener {
-                        text ->
+                        _ ->
                     btn.setEnabled(true)
                 }
                 btn.setOnClickListener(){
@@ -167,12 +160,7 @@ class SettingsItemFragment : Fragment() {
             }
             "Gestisci Notifiche" -> {
                 var notswitch = view.findViewById<SwitchMaterial>(R.id.user_settings_item_notification_notswitch)
-                var check = false //TODO fare controllo se notifiche attivate
 
-//                var notificationService = NotificationService(requireActivity().application)
-//                var activityManager = requireActivity().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-//                var runningService = activityManager.getRunningServices(Int.MAX_VALUE)
-//                var serviceInfo = runningService.get
                 var sp = requireActivity().getSharedPreferences("NOTIFY", Context.MODE_PRIVATE)
 
                 notswitch.isChecked = sp.getBoolean("NOTIFICATIONS",false)
@@ -181,13 +169,11 @@ class SettingsItemFragment : Fragment() {
                         _, isChecked ->
                     if(isChecked){
                         sp.edit().putBoolean("NOTIFICATIONS",isChecked)
-//                        notificationService.startNotificationService()
 
                         val intent = Intent(requireActivity().applicationContext,NotificationService::class.java)
                         requireActivity().startService(intent)
                     }else{
                         sp.edit().putBoolean("NOTIFICATIONS",isChecked)
-//                        notificationService.stopNotificationService()
                         val intent = Intent(requireActivity().applicationContext,NotificationService::class.java)
                         requireActivity().stopService(intent)
                     }
@@ -201,9 +187,9 @@ class SettingsItemFragment : Fragment() {
 
 
 
-        var toolbartitle = requireActivity().findViewById<TextView>(R.id.toolbarTitle)
+        val toolbartitle = requireActivity().findViewById<TextView>(R.id.toolbarTitle)
         toolbartitle.text = settname
-        var backbtn = requireActivity().findViewById<AppCompatImageButton>(R.id.backButtonVendor)
+        val backbtn = requireActivity().findViewById<AppCompatImageButton>(R.id.backButton)
         backbtn.visibility = View.VISIBLE
         backbtn.setOnClickListener{
             parentFragmentManager.popBackStack()
@@ -250,18 +236,19 @@ class SettingsItemFragment : Fragment() {
                 Toast.makeText(context,"Posizione store aggiornata con successo",Toast.LENGTH_SHORT).show()
             }
         }
-
-        locationVM?.locationData?.observe(viewLifecycleOwner){
-            locationdata ->
-            if(locationdata != null && !(locationdata.latitude == 0.0 && locationdata.longitude == 0.0)){
-                store?.lat = locationdata.latitude
-                store?.lon = locationdata.longitude
-                locationVM?.stopLocationUpdates()
-                vm?.insertStore(store!!)
-                updatelocation = true
-                alert.visibility = View.GONE
-                btnpos.text = "Aggiorna Posizione Store"
-                locationVM?.locationData?.value = null
+        if(userType){
+            locationVM?.locationData?.observe(viewLifecycleOwner){
+                    locationdata ->
+                if(locationdata != null && !(locationdata.latitude == 0.0 && locationdata.longitude == 0.0)){
+                    store?.lat = locationdata.latitude
+                    store?.lon = locationdata.longitude
+                    locationVM?.stopLocationUpdates()
+                    vm?.insertStore(store!!)
+                    updatelocation = true
+                    alert.visibility = View.GONE
+                    btnpos.text = "Aggiorna Posizione Store"
+                    locationVM?.locationData?.value = null
+                }
             }
         }
 

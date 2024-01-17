@@ -30,7 +30,7 @@ class VenditoreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.venditore_activity)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        var backbtn = findViewById<ImageButton>(R.id.backButtonVendor)
+        var backbtn = findViewById<ImageButton>(R.id.backButton)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 

@@ -1,18 +1,15 @@
-package it.torino.totalshop
+package it.torino.totalshop.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutParams
+import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.utente.UtenteProdListOrders
-import it.torino.totalshop.venditore.HomeFragmentVenditore
-import it.torino.totalshop.venditore.VenditoreActivity
 
 class ProdsCartAdapter(var pList: List<ProductsData>,var pMap: Map<ProductsData,Int>,val activity: UtenteProdListOrders): RecyclerView.Adapter<ProdsCartAdapter.ProdsViewHolder>() {
     inner class ProdsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -23,8 +20,8 @@ class ProdsCartAdapter(var pList: List<ProductsData>,var pMap: Map<ProductsData,
         val deleteP: ImageView = itemView.findViewById(R.id.deleteProdCart)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProdsCartAdapter.ProdsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.prods_cart_list , parent , false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProdsViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.prods_cart_list, parent , false)
         return ProdsViewHolder(view)
     }
 

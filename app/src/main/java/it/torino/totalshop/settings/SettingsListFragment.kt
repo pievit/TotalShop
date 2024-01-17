@@ -1,4 +1,4 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.settings
 
 import android.app.AlertDialog
 import android.content.Context
@@ -7,16 +7,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.R
-import it.torino.totalshop.UserSettingsAdapter
+import it.torino.totalshop.adapter.UserSettingsAdapter
 import it.torino.totalshop.login.LoginActivity
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
@@ -44,7 +42,7 @@ class SettingsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var toolbartitle = requireActivity().findViewById<TextView>(R.id.toolbarTitle)
         toolbartitle.text = "Settings"
-        var backbtn = requireActivity().findViewById<AppCompatImageButton>(R.id.backButtonVendor)
+        var backbtn = requireActivity().findViewById<ImageButton>(R.id.backButton)
         backbtn.visibility = View.INVISIBLE
         vm?.getUser(requireActivity().intent.getStringExtra("email")!!,requireActivity().intent.getBooleanExtra("userType",false))
         vm?.user?.observe(viewLifecycleOwner){
@@ -81,7 +79,8 @@ class SettingsListFragment : Fragment() {
         logoutDialog = logoutBuilder.create()
 
         items.add(Pair("person_24px","Account"))
-        items.add(Pair("store_logo_24px","Gestisci Store"))
+        if(requireActivity().intent.getBooleanExtra("userType",false))
+            items.add(Pair("store_logo_24px","Gestisci Store"))
         items.add(Pair("lock_24px","Modifica Password"))
         items.add(Pair("notifications_24px","Gestisci Notifiche"))
         items.add(Pair("logout_24px","Logout"))

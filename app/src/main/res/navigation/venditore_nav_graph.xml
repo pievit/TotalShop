@@ -12,7 +12,7 @@ app:startDestination="@id/venditore_home">
 
 <fragment
     android:id="@+id/venditore_settings"
-    android:name="it.torino.totalshop.venditore.SettingsFragmentVenditore"
+    android:name="it.torino.totalshop.settings.SettingsFragment"
     tools:layout="@layout/user_settings">
     <!--            <argument-->
     <!--                android:name="UserData"-->

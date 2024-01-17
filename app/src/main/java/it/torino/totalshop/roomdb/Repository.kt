@@ -25,11 +25,11 @@ class Repository(application: Context?) : ViewModel(){
         val db = MyRoomDb.getDatabase(application!!)
         dbUsersDataDao = db!!.myUsersDataDao()
         usersList = MutableLiveData()
-        dbStoreDataDAO= db!!.myStoreDataDao()
+        dbStoreDataDAO= db.myStoreDataDao()
         storeList = MutableLiveData()
-        dbProdsDataDAO = db!!.myProdsDataDao()
+        dbProdsDataDAO = db.myProdsDataDao()
         prodsList = MutableLiveData()
-        dbOrdersDataDAO = db!!.myOrdersDataDao()
+        dbOrdersDataDAO = db.myOrdersDataDao()
         ordersList = MutableLiveData()
     }
 }

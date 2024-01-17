@@ -1,4 +1,4 @@
-package it.torino.totalshop
+package it.torino.totalshop.adapter
 
 
 import android.content.Context
@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import it.torino.totalshop.R
 
 class UserSettingsAdapter(var context: Context, var settingsMenu: ArrayList<Pair<String,String>>, val onItemClick: (String) -> Unit) : RecyclerView.Adapter<UserSettingsAdapter.SettingsViewHolder>(){
 
@@ -21,7 +21,7 @@ class UserSettingsAdapter(var context: Context, var settingsMenu: ArrayList<Pair
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_settings_card , parent , false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.user_settings_card, parent , false)
         return SettingsViewHolder(view)
     }
 

@@ -27,7 +27,7 @@
         </fragment>
         <fragment
             android:id="@+id/utente_settings"
-            android:name="it.torino.totalshop.utente.SettingsFragment"
+            android:name="it.torino.totalshop.settings.SettingsFragment"
             tools:layout="@layout/user_settings">
 <!--            <argument-->
 <!--                android:name="UserData"-->
