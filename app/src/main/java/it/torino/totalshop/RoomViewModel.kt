@@ -13,14 +13,9 @@ import it.torino.totalshop.roomdb.entities.UsersData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
 
-class viewModel(application: Application): AndroidViewModel(application) {
+class RoomViewModel(application: Application): AndroidViewModel(application) {
     private val repository: Repository = Repository(application)
-    var modelRoom: modelRoom = modelRoom(application,repository,viewModelScope)
     var usersList: MutableLiveData<MutableList<UsersData>?> = MutableLiveData<MutableList<UsersData>?>()
     var storesList: MutableLiveData<MutableList<StoreData>?> = MutableLiveData<MutableList<StoreData>?>()
     var prodsList: MutableLiveData<MutableList<ProductsData>?> = MutableLiveData<MutableList<ProductsData>?>()
@@ -45,7 +40,6 @@ class viewModel(application: Application): AndroidViewModel(application) {
     fun getUser(email: String,userType: Boolean,prv: Boolean=false){
         viewModelScope.launch(Dispatchers.IO){
             val res = getUserSus(email,userType)
-            Log.d("debug","resuser: "+res.toString())
             withContext(Dispatchers.Main){
                 if(!prv){
                     user!!.value = res

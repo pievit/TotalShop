@@ -2,31 +2,29 @@ package it.torino.totalshop.utente
 
 
 import android.Manifest
-import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import it.torino.totalshop.LocationViewModel
+import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
-import it.torino.totalshop.viewModel
 
 class UtenteActivity : AppCompatActivity() {
     var locationVM : LocationViewModel? = null
@@ -46,13 +44,6 @@ class UtenteActivity : AppCompatActivity() {
 
         backbtn.setOnClickListener{
             navController.popBackStack()
-        }
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            Log.d("ActivityUtente", "Destination changed to ${destination.id}")
-            when (destination.id) {
-                R.id.utente_prod_sel -> backbtn.visibility = VISIBLE;
-                else -> backbtn.visibility = GONE;
-            }
         }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -74,7 +65,7 @@ class UtenteActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.toolbarTitle).setText("Settings")
                 }
             }
-            Log.d("ActivityVenditore", "Destination changed to ${destination.id}")
+            Log.d("ActivityUtente", "Destination changed to ${destination.id}")
         }
 
 
@@ -117,7 +108,7 @@ class UtenteActivity : AppCompatActivity() {
             }
 
         }else{
-            Log.d("Test","start ls" )
+            Log.d("UtenteActivity","start location Service after permissions" )
             locationVM?.startLocationService()
         }
 
@@ -125,6 +116,23 @@ class UtenteActivity : AppCompatActivity() {
 //        if(notif>=0){
 //            navController.navigate(R.id.utente_ordini)
 //         }
+
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestNotificationPermission()
+            return
+        }else{
+            Log.d("UtenteActivity","Start Notification service with permissions")
+            var sp = getSharedPreferences("NOTIFY", Context.MODE_PRIVATE)
+            if(sp.getBoolean("NOTIFICATIONS",false)){
+                val intentNotif = Intent(this, NotificationService::class.java)
+                startService(intentNotif)
+            }
+        }
     }
 
 
@@ -134,7 +142,6 @@ class UtenteActivity : AppCompatActivity() {
         bottomNav?.setupWithNavController(navController)
         bottomNav?.setOnItemReselectedListener {
             navController.navigate(it.itemId)
-            Log.d("Test",it.itemId.toString())
         }
 
     }
@@ -146,6 +153,18 @@ class UtenteActivity : AppCompatActivity() {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     locationVM!!.startLocationService()
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return
+            }
+            NotificationService.NOTIFICATION_PERMISSION_ID -> {
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    getSharedPreferences("NOTIFY",Context.MODE_PRIVATE).edit().putBoolean("NOTIFICATIONS",true).apply()
+                    val intentNotif = Intent(this,NotificationService::class.java)
+                    startService(intentNotif)
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -169,5 +188,17 @@ class UtenteActivity : AppCompatActivity() {
             ),
             locationVM!!.MY_PERMISSIONS_REQUEST_LOCATION
         )
+    }
+
+    fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ),
+                NotificationService.NOTIFICATION_PERMISSION_ID
+            )
+        }
     }
 }

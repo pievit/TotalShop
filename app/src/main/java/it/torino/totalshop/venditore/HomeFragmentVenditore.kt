@@ -17,10 +17,10 @@ import it.torino.totalshop.adapter.ProdsAdapter
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.ProductsData
 import it.torino.totalshop.roomdb.entities.StoreData
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 class HomeFragmentVenditore : Fragment() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private var prodList = ArrayList<ProductsData>()
@@ -32,7 +32,7 @@ class HomeFragmentVenditore : Fragment() {
     private lateinit var delProd: ProductsData
     private lateinit var delDialog: AlertDialog
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         return inflater.inflate(R.layout.venditore_home, container, false)
     }
 

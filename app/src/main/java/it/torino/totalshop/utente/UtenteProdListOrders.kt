@@ -23,14 +23,14 @@ import it.torino.totalshop.adapter.ProdsOrdersAdapter
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
 
 class UtenteProdListOrders: Fragment() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private var prodList = ArrayList<ProductsData>()
@@ -44,7 +44,7 @@ class UtenteProdListOrders: Fragment() {
     private var newProdIns: Boolean = false
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.utente_prodlist_ord,container,false)
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         return view
     }
 
@@ -114,8 +114,8 @@ class UtenteProdListOrders: Fragment() {
 
     fun showQuantityDialog(prod: ProductsData){
         addDialog.show()
-        dialogView.findViewById<TextView>(R.id.prodReminder).setText(prod.name+" ${prod.price}€")
-        dialogView.findViewById<TextView>(R.id.subTotPrice).setText("${ if(prodMap.containsKey(prod)) prodMap.get(prod)!!*prod.price else  prod.price} €")
+        dialogView.findViewById<TextView>(R.id.prodReminder).setText(prod.name+" "+((prod.price*100).roundToInt().toDouble()/100).toString()+" €")
+        dialogView.findViewById<TextView>(R.id.subTotPrice).setText(if(prodMap.containsKey(prod)) ((prodMap.get(prod)!!*prod.price*100).roundToInt().toDouble()/100).toString() else  ((prod.price*100).roundToInt().toDouble()/100).toString()+" €")
         dialogView.findViewById<TextView>(R.id.prodQuant).setText("${ if(prodMap.containsKey(prod)) prodMap.get(prod) else  1}")
         dialogView.findViewById<ImageButton>(R.id.butDecQuan).setOnClickListener{
             decProdQuantity(dialogView.findViewById<TextView>(R.id.prodQuant).text.toString().toInt(),prod.price)
@@ -135,14 +135,14 @@ class UtenteProdListOrders: Fragment() {
     fun decProdQuantity(q: Int,price: Float){
         if(q>1){
             dialogView.findViewById<TextView>(R.id.prodQuant).setText("${q-1}")
-            dialogView.findViewById<TextView>(R.id.subTotPrice).setText("${price*(q-1)} €")
+            dialogView.findViewById<TextView>(R.id.subTotPrice).setText(((price*(q-1)*100).roundToInt().toDouble()/100).toString() +" €")
         }
     }
 
     fun incProdQuantity(q: Int,price: Float){
         if(q<50){
             dialogView.findViewById<TextView>(R.id.prodQuant).setText("${q+1}")
-            dialogView.findViewById<TextView>(R.id.subTotPrice).setText("${price*(q+1)} €")
+            dialogView.findViewById<TextView>(R.id.subTotPrice).setText(((price*(q+1)*100).roundToInt().toDouble()/100).toString() +" €")
         }
     }
 
@@ -189,7 +189,7 @@ class UtenteProdListOrders: Fragment() {
         val storeId = requireArguments().getInt("storeId")
 //        val type = object : TypeToken<Map<ProductsData, Int>>() {}.type
         val orderedProd: String = Gson().toJson(prodMap.toMap())
-        val order = OrdersData(orderedProd,usermail,storeId,"nuovo","Primo ordine",orderDate)
+        val order = OrdersData(orderedProd,usermail,storeId,"nuovo","",orderDate)
         vm?.insertOrder(order)
 
 

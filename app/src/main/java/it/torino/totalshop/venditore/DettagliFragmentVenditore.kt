@@ -3,7 +3,6 @@ package it.torino.totalshop.venditore
 import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -14,7 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -23,13 +21,12 @@ import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.ProdsList
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.venditore.OrdiniFragmentVenditore
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 import org.apache.commons.text.StringEscapeUtils
 import kotlin.math.roundToInt
 
 class DettagliFragmentVenditore : Fragment() {
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     var order : OrdersData? = null
     private lateinit var annDialog: AlertDialog
     private lateinit var annDialogView: View
@@ -40,7 +37,7 @@ class DettagliFragmentVenditore : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.venditore_ordini_info, container, false)
         view.findViewById<FloatingActionButton>(R.id.vendor_floatingbtn).setOnClickListener {
@@ -56,7 +53,10 @@ class DettagliFragmentVenditore : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if(order != null){
+            view.visibility = View.VISIBLE
             update()
+        }else{
+            view.visibility = View.INVISIBLE
         }
 
         vm?.user?.observe(viewLifecycleOwner){
@@ -96,11 +96,19 @@ class DettagliFragmentVenditore : Fragment() {
                 )
                 prods[p] = objectMap.get(it)!!
             }
+
+            if(order?.status != "nuovo") {
+                view?.findViewById<TextView>(R.id.vendor_ord_inf_commento)?.visibility = View.VISIBLE
+                view?.findViewById<TextView>(R.id.vendor_ord_inf_commento)?.text = order?.comment
+                view?.findViewById<TextView>(R.id.vendor_comment_title)?.visibility = View.VISIBLE
+            }else{
+                view?.findViewById<TextView>(R.id.vendor_comment_title)?.visibility = View.GONE
+                view?.findViewById<TextView>(R.id.vendor_ord_inf_commento)?.visibility = View.GONE
+            }
             view?.findViewById<TextView>(R.id.vendor_ord_inf_email)?.text = order?.usermail
             view?.findViewById<TextView>(R.id.vendor_ord_inf_id)?.text = "Ordine N." + order?.id
             view?.findViewById<TextView>(R.id.vendor_ord_inf_data)?.text = order?.dataOrd
             view?.findViewById<TextView>(R.id.vendor_ord_inf_status)?.text = order?.status
-            view?.findViewById<TextView>(R.id.vendor_ord_inf_commento)?.text = order?.comment
 
             var sum = prods.keys.sumOf { key ->
                 (key.price * prods.get(key)!!).toDouble()

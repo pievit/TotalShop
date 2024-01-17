@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import it.torino.totalshop.R
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 class SettingsFragment : Fragment() {
 
-    private var vm: viewModel? = null
+    private var vm: RoomViewModel? = null
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         return inflater.inflate(R.layout.user_settings, container,false)
 
     }

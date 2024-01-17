@@ -20,11 +20,11 @@ import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 class SettingsItemFragment : Fragment() {
 
-    private var vm : viewModel? = null
+    private var vm : RoomViewModel? = null
     var settname : String = ""
     private var userType: Boolean = false
     private lateinit var user : UsersData
@@ -43,7 +43,7 @@ class SettingsItemFragment : Fragment() {
 
 //        settname = requireArguments().getString("settname")!!
         userType = requireActivity().intent.getBooleanExtra("userType",false)
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         locationVM = ViewModelProvider(requireActivity())[LocationViewModel::class.java]
         val layout : Int = when(settname){
             "Account" -> R.layout.user_settings_item_account
@@ -168,12 +168,12 @@ class SettingsItemFragment : Fragment() {
                 notswitch.setOnCheckedChangeListener(){
                         _, isChecked ->
                     if(isChecked){
-                        sp.edit().putBoolean("NOTIFICATIONS",isChecked)
+                        sp.edit().putBoolean("NOTIFICATIONS",isChecked).apply()
 
                         val intent = Intent(requireActivity().applicationContext,NotificationService::class.java)
                         requireActivity().startService(intent)
                     }else{
-                        sp.edit().putBoolean("NOTIFICATIONS",isChecked)
+                        sp.edit().putBoolean("NOTIFICATIONS",isChecked).apply()
                         val intent = Intent(requireActivity().applicationContext,NotificationService::class.java)
                         requireActivity().stopService(intent)
                     }

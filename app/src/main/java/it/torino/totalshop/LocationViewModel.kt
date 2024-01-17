@@ -36,7 +36,7 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
 
     private val locationListener : LocationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            Log.d("Test", "location Listener change "+ location.latitude +" "+location.longitude)
+            Log.d("SensorLocationLog", "location Listener change "+ location.latitude +" "+location.longitude)
             if(_latitude != location.latitude || _longitude!=location.longitude){
                 _latitude = location.latitude
                 _longitude = location.longitude

@@ -11,21 +11,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
 import it.torino.totalshop.utente.UtenteActivity
 import it.torino.totalshop.venditore.VenditoreActivity
-import it.torino.totalshop.viewModel
+import it.torino.totalshop.RoomViewModel
 
 class LoginFragment: Fragment() {
     var userType : Int? = null
-    var vm: viewModel? = null
+    var vm: RoomViewModel? = null
     var flagLogin: Boolean = false
     var button :Button? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         userType = arguments?.getInt("UserType") ?: 0
-        vm = ViewModelProvider(requireActivity())[viewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
         return inflater.inflate(R.layout.login, container, false)
 
     }
@@ -41,7 +40,11 @@ class LoginFragment: Fragment() {
 //                popExit = R.anim.slide_out_right
 //            }
 //        }
-
+        if(userType==0){
+            view.findViewById<TextView>(R.id.logintitle).text = "Login Utente"
+        }else{
+            view.findViewById<TextView>(R.id.logintitle).text = "Login Venditore"
+        }
         button = view?.findViewById<Button>(R.id.loginuserbtn)
         vm?.user?.observe(viewLifecycleOwner){
             res ->
