@@ -137,7 +137,7 @@ class HomeFragmentUtente: Fragment() {
                 val c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
                 val distance = earthRadius * c
-                if(distance<= (radius/1000)){
+                if(distance<= (radius.toDouble()/1000)){
                     nearStoreList.add(r)
                 }
             }
@@ -157,7 +157,8 @@ class HomeFragmentUtente: Fragment() {
         var negList: List<StoreData> = ArrayList()
         if(newText!=null){
              negList = mList.filter {
-                negozio -> negozio.storeName.contains(newText as CharSequence,true) ||
+                negozio -> negozio.storeCategory.contains(newText as CharSequence, true) ||
+                    negozio.storeName.contains(newText as CharSequence,true) ||
                     prodList.any {
                         prodotto -> prodotto.storeId == negozio.id && prodotto.name.contains(newText as CharSequence,true)
                     }

@@ -77,6 +77,8 @@ class SettingsItemFragment : Fragment() {
         }
         when(settname){
             "Account" -> {
+                val phonereg = Regex("\\A(\\+39)?[0-9]{9,10}\$")
+
                 var btn = view.findViewById<Button>(R.id.user_settings_item_account_btnsave)
                 name = view.findViewById(R.id.user_settings_item_account_name)
                 email = view.findViewById(R.id.user_settings_item_account_email)
@@ -92,11 +94,15 @@ class SettingsItemFragment : Fragment() {
                     btn.setEnabled(true)
                 }
                 btn.setOnClickListener(){
-                    user.name = name.text.toString()
-                    user.phone = numero.text.toString()
-                    updateuser = true
-                    btn.setEnabled(false)
-                    vm?.modifyUser(user)
+                    if(numero.text.toString().matches(phonereg)){
+                        updateuser = true
+                        user.phone = numero.text.toString()
+                        user.name = name.text.toString()
+                        btn.setEnabled(false)
+                        vm?.modifyUser(user)
+                    }else{
+                        Toast.makeText(context,"Numero di telefono non valido",Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             "Modifica Password" -> {
@@ -154,6 +160,7 @@ class SettingsItemFragment : Fragment() {
                 btnpos = view.findViewById(R.id.user_settings_item_store_btnpos)
                 btnpos.setOnClickListener(){
                     locationVM?.startLocationService()
+                    btnpos.isEnabled = false
                 }
                 alert = view.findViewById(R.id.user_settings_item_store_locNotFound)
 
@@ -244,6 +251,7 @@ class SettingsItemFragment : Fragment() {
                     store?.lon = locationdata.longitude
                     locationVM?.stopLocationUpdates()
                     vm?.insertStore(store!!)
+                    btnpos.isEnabled = true
                     updatelocation = true
                     alert.visibility = View.GONE
                     btnpos.text = "Aggiorna Posizione Store"
@@ -254,6 +262,5 @@ class SettingsItemFragment : Fragment() {
 
 
     }
-
 
 }
