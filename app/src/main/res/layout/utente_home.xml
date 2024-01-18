@@ -12,7 +12,7 @@
     app:iconifiedByDefault="false"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toStartOf="@id/filterSearch"
-    app:layout_constraintBottom_toTopOf="@id/storeList"
+    app:layout_constraintBottom_toTopOf="@id/txtNoStoreArea"
     app:layout_constraintHorizontal_weight="8"
     app:queryHint="Cerca negozio,categoria o prodotto"
     />
@@ -25,17 +25,31 @@
         app:layout_constraintStart_toEndOf="@id/searchBar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/storeList"
+        app:layout_constraintBottom_toTopOf="@id/txtNoStoreArea"
         android:backgroundTint="@color/white"
         android:src="@drawable/tune_24px"
-
         android:contentDescription="Filter" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/storeList"
+        android:id="@+id/txtNoStoreArea"
+        android:text="Nessun negozio nel raggio di ricerca"
+        android:gravity="center"
+        android:textSize="25dp"
+        app:layout_constraintVertical_weight="8"
+        android:elegantTextHeight="true"
+        android:visibility="visible"
+        />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/storeList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintVertical_weight="1"
+        app:layout_constraintTop_toBottomOf="@id/txtNoStoreArea"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

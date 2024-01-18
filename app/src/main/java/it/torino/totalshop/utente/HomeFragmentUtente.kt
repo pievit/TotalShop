@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.SearchView
@@ -38,6 +39,7 @@ class HomeFragmentUtente: Fragment() {
     private var mList = ArrayList<StoreData>()
     private var prodList = ArrayList<ProductsData>()
     private lateinit var adapter: storeAdapter
+    lateinit var nostoretxt : TextView
     var myCoord: LocationData = LocationData(0.0,0.0)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
@@ -47,6 +49,7 @@ class HomeFragmentUtente: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        nostoretxt = view.findViewById(R.id.txtNoStoreArea)
 
         recyclerView = view.findViewById(R.id.storeList)
         searchView = view.findViewById(R.id.searchBar)
@@ -141,7 +144,13 @@ class HomeFragmentUtente: Fragment() {
 
         }
 
+        if(nearStoreList.size == 0){
+            nostoretxt.visibility = View.VISIBLE
+        }else{
+            nostoretxt.visibility = View.GONE
+        }
         adapter.setFilteredList(nearStoreList)
+
     }
 
     private fun updateList(newText: String?){
