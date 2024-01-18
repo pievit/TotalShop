@@ -1,4 +1,4 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.views.venditore
 
 import android.Manifest
 import android.annotation.SuppressLint

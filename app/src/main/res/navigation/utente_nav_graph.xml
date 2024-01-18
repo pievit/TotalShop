@@ -6,7 +6,7 @@
     app:startDestination="@id/utente_home">
         <fragment
             android:id="@+id/utente_home"
-            android:name="it.torino.totalshop.utente.HomeFragmentUtente"
+            android:name="it.torino.totalshop.views.utente.HomeFragmentUtente"
             tools:layout="@layout/utente_home">
                 <argument
                     android:name="storeName"
@@ -22,12 +22,12 @@
 
         <fragment
             android:id="@+id/utente_prod_sel"
-            android:name="it.torino.totalshop.utente.UtenteProdListOrders"
+            android:name="it.torino.totalshop.views.utente.UtenteProdListOrders"
             tools:layout="@layout/utente_prodlist_ord">
         </fragment>
         <fragment
             android:id="@+id/utente_settings"
-            android:name="it.torino.totalshop.settings.SettingsFragment"
+            android:name="it.torino.totalshop.views.settings.SettingsFragment"
             tools:layout="@layout/user_settings">
 <!--            <argument-->
 <!--                android:name="UserData"-->
@@ -37,7 +37,7 @@
         </fragment>
         <fragment
             android:id="@+id/utente_ordini"
-            android:name="it.torino.totalshop.utente.OrdiniFragment"
+            android:name="it.torino.totalshop.views.utente.OrdiniFragment"
             tools:layout="@layout/utente_ordini">
 <!--            <argument-->
 <!--                android:name="UserData"-->

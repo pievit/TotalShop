@@ -25,5 +25,5 @@
         app:layout_constraintVertical_weight="1"
         app:layout_constraintTop_toBottomOf="@id/utente_no_ord"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:context="it.torino.totalshop.utente.OrdiniFragment" />
+        tools:context="it.torino.totalshop.views.utente.OrdiniFragment" />
 </androidx.constraintlayout.widget.ConstraintLayout>

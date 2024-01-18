@@ -18,12 +18,12 @@
         android:theme="@style/Theme.TotalShop"
         tools:targetApi="31">
         <activity
-            android:name="it.torino.totalshop.utente.UtenteActivity"
+            android:name="it.torino.totalshop.views.utente.UtenteActivity"
             android:exported="false">
             <nav-graph android:value="@navigation/utente_nav_graph" />
         </activity>
         <activity
-            android:name="it.torino.totalshop.login.LoginActivity"
+            android:name="it.torino.totalshop.views.login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
             <nav-graph android:value="@navigation/login_nav_graph" />
         </activity>
         <activity
-            android:name="it.torino.totalshop.venditore.VenditoreActivity"
+            android:name="it.torino.totalshop.views.venditore.VenditoreActivity"
             android:exported="false">
             <nav-graph android:value="@navigation/venditore_nav_graph" />
         </activity>

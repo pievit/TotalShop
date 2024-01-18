@@ -1,4 +1,4 @@
-package it.torino.totalshop.utente
+package it.torino.totalshop.views.utente
 
 import android.app.AlertDialog
 import android.content.res.Configuration

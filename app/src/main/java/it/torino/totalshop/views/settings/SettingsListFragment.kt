@@ -1,4 +1,4 @@
-package it.torino.totalshop.settings
+package it.torino.totalshop.views.settings
 
 import android.app.AlertDialog
 import android.content.Context
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.NotificationService
 import it.torino.totalshop.R
 import it.torino.totalshop.adapter.UserSettingsAdapter
-import it.torino.totalshop.login.LoginActivity
+import it.torino.totalshop.views.login.LoginActivity
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.roomdb.entities.UsersData
 import it.torino.totalshop.RoomViewModel

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.utente.UtenteProdListOrders
+import it.torino.totalshop.views.utente.UtenteProdListOrders
 
 class ProdsOrdersAdapter(var pList: List<ProductsData>,val activity: UtenteProdListOrders): RecyclerView.Adapter<ProdsOrdersAdapter.ProdsViewHolder>() {
     inner class ProdsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){

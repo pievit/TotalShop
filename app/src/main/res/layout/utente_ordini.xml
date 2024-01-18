@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="it.torino.totalshop.utente.UtenteActivity">
+    tools:context="it.torino.totalshop.views.utente.UtenteActivity">
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/utenteOrdiniListFragment"
         android:layout_width="0dp"

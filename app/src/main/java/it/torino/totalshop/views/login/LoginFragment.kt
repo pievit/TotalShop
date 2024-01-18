@@ -1,4 +1,4 @@
-package it.torino.totalshop.login
+package it.torino.totalshop.views.login
 
 import android.content.Context
 import android.content.Intent
@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
-import it.torino.totalshop.utente.UtenteActivity
-import it.torino.totalshop.venditore.VenditoreActivity
+import it.torino.totalshop.views.utente.UtenteActivity
+import it.torino.totalshop.views.venditore.VenditoreActivity
 import it.torino.totalshop.RoomViewModel
 
 class LoginFragment: Fragment() {
@@ -68,7 +68,7 @@ class LoginFragment: Fragment() {
                         intent = Intent(activity, UtenteActivity::class.java)
                         msg = "Utente Loggato con successo."
                     }else{
-                        intent = Intent(activity,VenditoreActivity::class.java)
+                        intent = Intent(activity, VenditoreActivity::class.java)
                         msg = "Venditore Loggato con successo."
 
                     }
