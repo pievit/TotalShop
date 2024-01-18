@@ -15,8 +15,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.torino.totalshop.roomdb.Repository
-import it.torino.totalshop.utente.UtenteActivity
-import it.torino.totalshop.venditore.VenditoreActivity
+import it.torino.totalshop.views.utente.UtenteActivity
+import it.torino.totalshop.views.venditore.VenditoreActivity
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -25,7 +25,6 @@ class NotificationService() : Service() {
     private lateinit var repository: Repository
     lateinit var notificationManager: NotificationManager
     lateinit var notificationManagerCompat: NotificationManagerCompat
-    var notifyOrdersList: MutableMap<Int,String> = mutableMapOf()
     lateinit var scheduler : ScheduledExecutorService
     lateinit var spNotOrd : SharedPreferences
     companion object{
@@ -128,8 +127,8 @@ class NotificationService() : Service() {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
 
-        Log.d("NotificationLog","Notification : user ->"+mail)
         }
+        Log.d("NotificationLog","Notification : user ->"+mail)
     }
 
 
@@ -206,8 +205,8 @@ class NotificationService() : Service() {
             } else {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
-            Log.d("NotificationLog", "Notification : user ->" + mail)
         }
+        Log.d("NotificationLog", "Notification : user ->" + mail)
     }
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -215,9 +214,6 @@ class NotificationService() : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val app = spNotOrd.getBoolean("NOTIFICATIONS",false)
-        spNotOrd.edit().clear().apply()
-        spNotOrd.edit().putBoolean("NOTIFICATIONS",app).apply()
         stopNotificationService()
     }
 }
