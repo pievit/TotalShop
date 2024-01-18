@@ -17,7 +17,6 @@ import it.torino.totalshop.adapter.ordAdapter
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.RoomViewModel
-import it.torino.totalshop.utente.DettagliFragmentUtente
 
 class OrdersListFragmentVenditore : Fragment() {
 
@@ -41,7 +40,7 @@ class OrdersListFragmentVenditore : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         adapter = ordAdapter(ordList) { selectedItem ->
-            val frag2 = DettagliFragmentUtente()
+            val frag2 = DettagliFragmentVenditore()
             frag2.order = selectedItem
             if(isOrientationLandscape()){
                 //carica nel fragment
