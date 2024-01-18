@@ -25,7 +25,6 @@ class NotificationService() : Service() {
     private lateinit var repository: Repository
     lateinit var notificationManager: NotificationManager
     lateinit var notificationManagerCompat: NotificationManagerCompat
-    var notifyOrdersList: MutableMap<Int,String> = mutableMapOf()
     lateinit var scheduler : ScheduledExecutorService
     lateinit var spNotOrd : SharedPreferences
     companion object{
@@ -54,8 +53,6 @@ class NotificationService() : Service() {
         }else{
             notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
         }
-
-
 
 
 
@@ -128,8 +125,8 @@ class NotificationService() : Service() {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
 
-        Log.d("NotificationLog","Notification : user ->"+mail)
         }
+        Log.d("NotificationLog","Notification : user ->"+mail)
     }
 
 
@@ -206,8 +203,8 @@ class NotificationService() : Service() {
             } else {
                 notificationManagerCompat.notify(1, notificationBuilder)
             }
-            Log.d("NotificationLog", "Notification : user ->" + mail)
         }
+        Log.d("NotificationLog", "Notification : user ->" + mail)
     }
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -215,9 +212,6 @@ class NotificationService() : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        val app = spNotOrd.getBoolean("NOTIFICATIONS",false)
-        spNotOrd.edit().clear().apply()
-        spNotOrd.edit().putBoolean("NOTIFICATIONS",app).apply()
         stopNotificationService()
     }
 }

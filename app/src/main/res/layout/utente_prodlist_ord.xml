@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
         android:src="@drawable/shopping_cart_24px"
         android:backgroundTint="@color/colorPrimaryDark"
