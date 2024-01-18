@@ -88,11 +88,12 @@ class UtenteProdListOrders: Fragment() {
 
         vm?.newOrder?.observe(viewLifecycleOwner){
             bool ->
-            if(bool){
+            if(newProdIns && bool){
+                newProdIns = false
                 Toast.makeText(requireActivity(),"Ordine creato con successo",Toast.LENGTH_SHORT).show()
                 cartDialog.dismiss()
-                findNavController().popBackStack()
 
+                findNavController().popBackStack()
             }
         }
 
@@ -200,6 +201,7 @@ class UtenteProdListOrders: Fragment() {
         val orderedProd: String = Gson().toJson(prodMap.toMap())
         val order = OrdersData(orderedProd,usermail,storeId,"nuovo","",orderDate)
         vm?.insertOrder(order)
+        newProdIns = true
 
 
     }
