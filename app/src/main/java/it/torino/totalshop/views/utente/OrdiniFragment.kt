@@ -1,4 +1,4 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.views.utente
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -12,15 +12,17 @@ import androidx.lifecycle.ViewModelProvider
 import it.torino.totalshop.R
 import it.torino.totalshop.RoomViewModel
 
-class OrdiniFragmentVenditore : Fragment() {
+class OrdiniFragment : Fragment() {
     var vm: RoomViewModel? = null
-    private var frag1 = OrdersListFragmentVenditore()
+    private var frag1 = OrdersListFragmentUtente()
+    private var frag2 = DettagliFragmentUtente()
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?,savedInstanceState: Bundle?): View? {
-        var view = inflater.inflate(R.layout.venditore_ordini, container, false)
+        var view = inflater.inflate(R.layout.utente_ordini, container, false)
         vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
 
+
         with(childFragmentManager.beginTransaction()) {
-            replace(R.id.venditoreOrdiniListFragment, frag1 )
+            replace(R.id.utenteOrdiniListFragment, frag1 )
             setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             commit()
         }

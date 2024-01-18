@@ -1,4 +1,4 @@
-package it.torino.totalshop.login
+package it.torino.totalshop.views.login
 
 import android.content.Context
 import android.content.Intent
@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import it.torino.totalshop.R
-import it.torino.totalshop.utente.UtenteActivity
-import it.torino.totalshop.venditore.VenditoreActivity
+import it.torino.totalshop.views.utente.UtenteActivity
+import it.torino.totalshop.views.venditore.VenditoreActivity
 
 class HomeFragment: Fragment() {
 

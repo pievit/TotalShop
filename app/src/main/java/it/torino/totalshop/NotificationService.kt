@@ -15,8 +15,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import it.torino.totalshop.roomdb.Repository
-import it.torino.totalshop.utente.UtenteActivity
-import it.torino.totalshop.venditore.VenditoreActivity
+import it.torino.totalshop.views.utente.UtenteActivity
+import it.torino.totalshop.views.venditore.VenditoreActivity
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit

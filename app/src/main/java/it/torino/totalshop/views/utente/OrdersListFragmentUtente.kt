@@ -1,4 +1,4 @@
-package it.torino.totalshop.venditore
+package it.torino.totalshop.views.utente
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -15,58 +15,53 @@ import androidx.recyclerview.widget.RecyclerView
 import it.torino.totalshop.R
 import it.torino.totalshop.adapter.ordAdapter
 import it.torino.totalshop.roomdb.entities.OrdersData
-import it.torino.totalshop.roomdb.entities.StoreData
 import it.torino.totalshop.RoomViewModel
 
-class OrdersListFragmentVenditore : Fragment() {
+class OrdersListFragmentUtente : Fragment() {
 
     var vm: RoomViewModel? = null
     private lateinit var recyclerView: RecyclerView
     private var ordList = ArrayList<OrdersData>()
     private lateinit var adapter: ordAdapter
-    private lateinit var myStore : StoreData
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view = inflater.inflate(R.layout.venditore_ordini_list,container,false)
+        var view = inflater.inflate(R.layout.utente_ordini_list,container,false)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         vm = ViewModelProvider(requireActivity())[RoomViewModel::class.java]
-        recyclerView = view.findViewById(R.id.venditoreOrdersList)
+
+        recyclerView = view.findViewById(R.id.utenteOrdersList)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         adapter = ordAdapter(ordList) { selectedItem ->
-            val frag2 = DettagliFragmentVenditore()
+            val frag2 = DettagliFragmentUtente()
             frag2.order = selectedItem
             if(isOrientationLandscape()){
                 //carica nel fragment
                 with(parentFragmentManager.beginTransaction()) {
-                    replace(R.id.venditoreOrdiniInfoFragment, frag2 )
+                    replace(R.id.utenteOrdiniInfoFragment, frag2 )
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     commit()
                 }
+
             } else {
                 //due pagine diverse
                 with(parentFragmentManager.beginTransaction()) {
-                    replace(R.id.venditoreOrdiniListFragment, frag2 )
+                    replace(R.id.utenteOrdiniListFragment, frag2 )
                     setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    addToBackStack("ord_info_list")
+                    addToBackStack("utente_ord_info_list")
                     commit()
                 }
             }
         }
         recyclerView.adapter = adapter
-        vm?.getStore(requireActivity().intent.getStringExtra("email")!!)
-        vm?.store?.observe(viewLifecycleOwner){
-                store ->
-            myStore = store
-            vm?.getAllOrdersFromStoreID(myStore.id)
-        }
-        var noordtext : TextView = view.findViewById(R.id.venditore_no_ord)
+        var noordtext : TextView = view.findViewById(R.id.utente_no_ord)
+        vm?.getAllOrdersFromEmail(requireActivity().intent.getStringExtra("email")!!)
         vm!!.ordList.observe(viewLifecycleOwner){
                 pl ->
             if(pl!=null){

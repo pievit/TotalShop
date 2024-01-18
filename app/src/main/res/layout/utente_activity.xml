@@ -6,7 +6,7 @@
     android:id="@+id/utente_drawer_layoutdrawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="it.torino.totalshop.utente.UtenteActivity">
+    tools:context="it.torino.totalshop.views.utente.UtenteActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

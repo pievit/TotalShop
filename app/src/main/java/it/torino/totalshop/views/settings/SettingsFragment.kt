@@ -1,4 +1,4 @@
-package it.torino.totalshop.settings
+package it.torino.totalshop.views.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater

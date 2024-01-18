@@ -1,4 +1,4 @@
-package it.torino.totalshop.login
+package it.torino.totalshop.views.login
 
 import android.Manifest
 import android.content.Context

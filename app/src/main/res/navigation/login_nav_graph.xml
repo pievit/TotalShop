@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home_activity"
-        android:name="it.torino.totalshop.login.HomeFragment"
+        android:name="it.torino.totalshop.views.login.HomeFragment"
         android:label="Login"
         tools:layout="@layout/home">
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/login_page"
-        android:name="it.torino.totalshop.login.LoginFragment"
+        android:name="it.torino.totalshop.views.login.LoginFragment"
         tools:layout="@layout/login">
         <argument
             android:name="UserType"
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/register_page"
-        android:name="it.torino.totalshop.login.RegisterFragment"
+        android:name="it.torino.totalshop.views.login.RegisterFragment"
         tools:layout="@layout/register">
         <argument
             android:name="UserType"
