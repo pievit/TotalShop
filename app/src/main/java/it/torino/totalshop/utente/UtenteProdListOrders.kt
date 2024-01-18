@@ -1,11 +1,15 @@
 package it.torino.totalshop.utente
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -18,16 +22,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
+import it.torino.totalshop.R
+import it.torino.totalshop.RoomViewModel
 import it.torino.totalshop.adapter.ProdsCartAdapter
 import it.torino.totalshop.adapter.ProdsOrdersAdapter
-import it.torino.totalshop.R
 import it.torino.totalshop.roomdb.entities.OrdersData
 import it.torino.totalshop.roomdb.entities.ProductsData
-import it.torino.totalshop.RoomViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
+
 
 class UtenteProdListOrders: Fragment() {
     var vm: RoomViewModel? = null
@@ -166,7 +171,11 @@ class UtenteProdListOrders: Fragment() {
         var cartRecycler =  cartView.findViewById<RecyclerView>(R.id.cartProdList)
         cartRecycler.setHasFixedSize(true)
         cartRecycler.layoutManager = LinearLayoutManager(requireActivity())
-        cartRecycler.layoutParams.width = 1250
+        val windowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+
+        cartRecycler.layoutParams.width = (displayMetrics.widthPixels*0.85).toInt()
         cartRecycler.adapter = cartProdAdapter
         cartDialog.show()
 

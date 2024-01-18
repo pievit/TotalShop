@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -26,8 +27,7 @@ class NotificationService() : Service() {
     lateinit var notificationManagerCompat: NotificationManagerCompat
     var notifyOrdersList: MutableMap<Int,String> = mutableMapOf()
     lateinit var scheduler : ScheduledExecutorService
-
-
+    lateinit var spNotOrd : SharedPreferences
     companion object{
         const val NOTIFICATION_PERMISSION_ID: Int = 25
         const val CHANNEL_NAME = "OrdersChannel"
@@ -36,6 +36,7 @@ class NotificationService() : Service() {
     }
     override fun onCreate() {
         super.onCreate()
+        spNotOrd = application.getSharedPreferences("NOTIFY", Context.MODE_PRIVATE)
         scheduler = Executors.newScheduledThreadPool(1)
         repository = Repository(application)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -53,6 +54,8 @@ class NotificationService() : Service() {
         }else{
             notificationManagerCompat = NotificationManagerCompat.from(applicationContext)
         }
+
+
 
 
 
@@ -81,20 +84,20 @@ class NotificationService() : Service() {
                 for(ord in ordersList){
                     var vendor = repository.dbStoreDataDAO?.getOwner(ord.storeId)
                     if(!ord.status.equals("nuovo")){
-                        if(notifyOrdersList.contains(ord.id) && notifyOrdersList.get(ord.id).equals("nuovo")){
+                        if(spNotOrd.contains("Order"+ord.id.toString())){
                             when(ord.status){
                                 "Confermato"-> sendNotificationConfirmed(ord.usermail,ord.id)
                                 "Annullato" -> sendNotificationAnnulled(ord.usermail,ord.id)
                                 "Cancellato" -> sendNotificationCanceled(vendor!!.email,ord.id)
                             }
-
-                            notifyOrdersList.remove(ord.id)
+                            spNotOrd.edit().remove("Order"+ord.id.toString()).apply()
                         }
 
 
                     }else{
-                        if(!notifyOrdersList.contains(ord.id)){
-                            notifyOrdersList.put(ord.id,ord.status)
+                        Log.d("Debug",spNotOrd.all.toString())
+                        if(!spNotOrd.contains("Order"+ord.id.toString())){
+                            spNotOrd.edit().putInt("Order"+ord.id.toString(),ord.id).apply()
                             sendNotificationNewOrder(vendor!!.email,ord.id)
                         }
                     }
@@ -212,6 +215,9 @@ class NotificationService() : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        val app = spNotOrd.getBoolean("NOTIFICATIONS",false)
+        spNotOrd.edit().clear().apply()
+        spNotOrd.edit().putBoolean("NOTIFICATIONS",app).apply()
         stopNotificationService()
     }
 }
