@@ -7,6 +7,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -38,6 +39,14 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
 
+        }
+
+        override fun onProviderDisabled(provider: String) {
+            Toast.makeText(application.applicationContext,"Attiva il gps per prendere la posizione!",Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onProviderEnabled(provider: String) {
+            Toast.makeText(application.applicationContext,"Gps attivato! Attendi qualche secondo...",Toast.LENGTH_SHORT).show()
         }
 
     }
